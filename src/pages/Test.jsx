@@ -1,4 +1,4 @@
-import { getArticles } from "../service/articles";
+import { getArticles } from "../services/articles";
 
 const Test = () => {
     getArticles()
