@@ -49,7 +49,7 @@ const LinkDropdown = ({ name, link }) => {
     return (
         <a
             href={link}
-            className="p-2 hover:bg-smporange hover:text-white transition-all duration-100"
+            className="py-2 px-4 hover:bg-smporange hover:text-white transition-all duration-100"
         >
             {name}
         </a>

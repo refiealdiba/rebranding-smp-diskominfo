@@ -18,14 +18,14 @@ const BigBanner = () => {
                 <div className="flex gap-7 mt-5">
                     <a
                         href=""
-                        className="bg-smporange text-white px-9 py-3 rounded-full flex items-center gap-2 shadow-xl"
+                        className="text-xl bg-smporange text-white px-9 py-3 rounded-full flex items-center gap-2 shadow-xl"
                     >
                         <p>Mars</p>
                         <Play />
                     </a>
                     <a
                         href=""
-                        className=" text-smporange px-9 py-3 rounded-full flex items-center gap-2 shadow-xl border-2 border-smporange"
+                        className="text-xl text-smporange px-9 py-3 rounded-full flex items-center gap-2 shadow-xl border-2 border-smporange"
                     >
                         <p>Hymne</p>
                         <Play />

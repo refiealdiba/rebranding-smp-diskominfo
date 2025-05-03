@@ -1,7 +1,10 @@
-import BigBanner from "../components/BigBanner";
-import WhySmp from "../components/WhySmp";
-import Sambutan from "../components/Sambutan";
-import MataPelajaran from "../components/MataPelajaran";
+import BigBanner from "../components/Home/BigBanner";
+import WhySmp from "../components/Home/WhySmp";
+import Sambutan from "../components/Home/Sambutan";
+import MataPelajaran from "../components/Home/MataPelajaran";
+import Ekstrakulikuler from "../components/Home/Ekstrakulikuler";
+import BeritaBaru from "../components/Home/BeritaBaru";
+import DokumentasiHome from "../components/Home/DokumentasiHome";
 
 const Home = () => {
     return (
@@ -10,6 +13,9 @@ const Home = () => {
             <WhySmp />
             <Sambutan />
             <MataPelajaran />
+            <Ekstrakulikuler />
+            <BeritaBaru />
+            <DokumentasiHome />
         </div>
     );
 };
