@@ -1,11 +1,11 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import RouteList from "./routes/RouteList";
-import "./index.css";
+import "./index.css"; // atau styling lain yang kamu pakai
 
-createRoot(document.getElementById("root")).render(
-    <StrictMode>
-        <RouterProvider router={RouteList} />
-    </StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <RouterProvider router={RouteList} />
+  </React.StrictMode>
 );
