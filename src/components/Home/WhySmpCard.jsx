@@ -4,7 +4,7 @@ const WhySmpCard = () => {
             {cardData.map((card, index) => (
                 <div
                     key={index}
-                    className="group flex flex-col justify-between items-center py-11 gap-5 px-10 shadow-xl text-center hover:shadow-2xl hover:scale-105 transition duration-300 ease-in-out hover:bg-smporange hover:text-white rounded-xl "
+                    className="group flex flex-col justify-between items-center py-11 gap-5 px-10 shadow-xl text-center hover:shadow-2xl hover:scale-105 transition duration-300 ease-in-out hover:bg-smporange hover:text-white rounded-xl bg-white"
                 >
                     <img src={card.icon} alt="" className="w-16 h-16" />
                     <h1 className="text-xl font-semibold">{card.title}</h1>

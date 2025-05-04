@@ -1,9 +1,7 @@
+import { Link } from "react-router-dom";
 import BeritaBaruList from "./BeritaBaruList";
-import { getArticles } from "../../services/articles";
 
 const BeritaBaru = () => {
-    const articleData = getArticles();
-
     return (
         <div className="flex flex-col items-center mt-20 gap-17 px-3 py-13">
             <div className="font-poppins font-bold flex flex-col gap-7">
@@ -14,16 +12,16 @@ const BeritaBaru = () => {
                     Berita Terbaru tentang SMP Negeri 20 Semarang
                 </p>
             </div>
-            <div>
+            <div className="max-w-7xl">
                 <BeritaBaruList />
             </div>
             <div>
-                <a
-                    href=""
+                <Link
+                    to="berita"
                     className="font-inter font-bold text-base bg-smporange text-white px-7 py-4 rounded-full"
                 >
                     Semua Berita
-                </a>
+                </Link>
             </div>
         </div>
     );
