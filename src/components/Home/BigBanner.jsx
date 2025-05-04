@@ -17,14 +17,16 @@ const BigBanner = () => {
 
                 <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 sm:gap-7 mt-3">
                     <a
-                        href=""
+                        href="https://www.youtube.com/watch?v=vxz46KRpxpk"
+                        target="_blank"
                         className="text-lg sm:text-xl bg-smporange text-white px-6 sm:px-9 py-3 rounded-full flex items-center justify-center gap-2 shadow-xl"
                     >
                         <p>Mars</p>
                         <Play />
                     </a>
                     <a
-                        href=""
+                        href="https://www.youtube.com/watch?v=aidlthzk3nM"
+                        target="_blank"
                         className="text-lg sm:text-xl text-smporange px-6 sm:px-9 py-3 rounded-full flex items-center justify-center gap-2 shadow-xl border-2 border-smporange"
                     >
                         <p>Hymne</p>
@@ -37,13 +39,16 @@ const BigBanner = () => {
                         Sosial Media Kami:
                     </p>
                     <div className="flex items-center gap-3">
-                        <a href="">
+                        <a href="https://www.facebook.com/spekados.semarang" target="_blank">
                             <Facebook />
                         </a>
-                        <a href="">
+                        <a href="https://www.instagram.com/smpnegeri20semarang/" target="_blank">
                             <Instagram />
                         </a>
-                        <a href="">
+                        <a
+                            href="https://www.youtube.com/channel/UCWpVKY10zSTTdQHMqagFzUg"
+                            target="_blank"
+                        >
                             <Youtube className="w-6 h-6 sm:w-8 sm:h-8" />
                         </a>
                     </div>

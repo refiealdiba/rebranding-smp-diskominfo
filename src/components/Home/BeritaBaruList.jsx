@@ -8,7 +8,7 @@ const BeritaBaruList = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                const data = await getArticleLatest(10);
+                const data = await getArticleLatest(8);
                 setArticleDataLatest(data);
             } catch (error) {
                 console.error(error);

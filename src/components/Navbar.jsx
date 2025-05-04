@@ -37,43 +37,50 @@ const Navbar = () => {
     return (
         <nav className="bg-white shadow-md fixed w-full z-50">
             <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between font-inter font-medium">
+                {/* Logo - kiri */}
                 <div className="flex items-center gap-4">
                     <img src="/logo.png" alt="Logo" className="w-12 h-12" />
                 </div>
 
-                {/* Desktop Menu */}
-                <div className="hidden lg:flex gap-6 items-center">
-                    <Link to="/" className={isActive("/")}>
-                        Beranda
-                    </Link>
-                    <DropdownMenu menu="Profil" />
-                    <Link to="/berita" className={isActive("/berita")}>
-                        Berita
-                    </Link>
-                    <DropdownMenu menu="Galeri" />
-                    <a
-                        href="https://sites.google.com/view/labipasmpn20semarang"
-                        target="_blank"
-                        className="hover:text-smporange"
-                    >
-                        Lab. IPA
-                    </a>
-                    <Link to="/ekstrakulikuler" className={isActive("/ekstrakulikuler")}>
-                        Ekstrakulikuler
-                    </Link>
-                    <a
-                        href="https://pustaka20.smpn20.semarangkota.go.id/"
-                        target="_blank"
-                        className="hover:text-smporange"
-                    >
-                        Perpustakaan
-                    </a>
-                    <Link to="/kontak" className={isActive("/kontak")}>
-                        Kontak
-                    </Link>
-                    <Link to="/pengaduan" className={isActive("/pengaduan")}>
-                        Pengaduan
-                    </Link>
+                {/* Menu Navigasi - tengah */}
+                <div className="flex-1 flex justify-center">
+                    <div className="hidden lg:flex gap-6 items-center">
+                        <Link to="/" className={isActive("/")}>
+                            Beranda
+                        </Link>
+                        <DropdownMenu menu="Profil" />
+                        <Link to="/berita" className={isActive("/berita")}>
+                            Berita
+                        </Link>
+                        <DropdownMenu menu="Galeri" />
+                        <a
+                            href="https://sites.google.com/view/labipasmpn20semarang"
+                            target="_blank"
+                            className="hover:text-smporange"
+                        >
+                            Lab. IPA
+                        </a>
+                        <Link to="/ekstrakulikuler" className={isActive("/ekstrakulikuler")}>
+                            Ekstrakulikuler
+                        </Link>
+                        <a
+                            href="https://pustaka20.smpn20.semarangkota.go.id/"
+                            target="_blank"
+                            className="hover:text-smporange"
+                        >
+                            Perpustakaan
+                        </a>
+                        <Link to="/kontak" className={isActive("/kontak")}>
+                            Kontak
+                        </Link>
+                        <Link to="/pengaduan" className={isActive("/pengaduan")}>
+                            Pengaduan
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Login / Avatar - kanan */}
+                <div className="hidden lg:flex items-center gap-4">
                     {user ? (
                         <div className="flex items-center gap-2">
                             <img
@@ -99,13 +106,13 @@ const Navbar = () => {
                     )}
                 </div>
 
-                {/* Mobile Menu Button */}
+                {/* Tombol menu untuk mobile */}
                 <button className="lg:hidden text-smporange" onClick={() => setMenuOpen(!menuOpen)}>
                     {menuOpen ? <X size={28} /> : <Menu size={28} />}
                 </button>
             </div>
 
-            {/* Mobile Menu Dropdown */}
+            {/* Menu Mobile */}
             {menuOpen && (
                 <div className="lg:hidden bg-white px-6 pb-4 flex flex-col gap-4 text-sm font-medium">
                     <Link to="/" className={isActive("/")}>

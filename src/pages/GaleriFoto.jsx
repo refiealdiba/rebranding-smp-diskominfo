@@ -1,9 +1,11 @@
 const GaleriFoto = () => {
     return (
-        <div>
-            <h1 className="text-3xl font-bold text-center flex items-center justify-center min-h-screen">
-                Galeri Foto
-            </h1>
+        <div className="flex flex-col items-center gap-17 px-3 py-13">
+            <div className="font-poppins font-bold flex flex-col gap-7">
+                <h1 className="text-center text-4xl">
+                    Galeri Foto <span className="text-smporange">SMP Negeri 20 Semarang</span>
+                </h1>
+            </div>
         </div>
     );
 };
