@@ -1,4 +1,4 @@
-import { supabase } from "@/config/db";
+import { supabase } from '../config/db';
 
 
 export const signInWithGoogle = async () => {
@@ -42,3 +42,12 @@ export const loginWithEmail = async (email, password) => {
         console.log("Login berhasil:", data);
     }
 };
+
+export const signOut = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+        console.error('Logout error:', error);
+    } else {
+        console.log('User logged out');
+    }
+}
