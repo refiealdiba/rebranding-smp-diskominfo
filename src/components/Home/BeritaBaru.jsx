@@ -1,6 +1,9 @@
 import BeritaBaruList from "./BeritaBaruList";
+import { getArticles } from "../../services/articles";
 
 const BeritaBaru = () => {
+    const articleData = getArticles();
+
     return (
         <div className="flex flex-col items-center mt-20 gap-17 px-3 py-13">
             <div className="font-poppins font-bold flex flex-col gap-7">

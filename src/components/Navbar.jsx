@@ -1,4 +1,5 @@
-import DropdownMenu from "./Home/DropdownMenu";
+import DropdownMenu from "./DropdownMenu";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     return (
@@ -7,21 +8,25 @@ const Navbar = () => {
                 <img src="logo.png" alt="SMPN 20 Logo" className="w-16" />
             </div>
             <div className="linkList flex gap-8">
-                <a href="" className="font-bold text-smporange">
+                <Link to="/" className="font-bold text-smporange">
                     Beranda
-                </a>
+                </Link>
                 <div className="relative cursor-pointer">
                     <DropdownMenu menu="Profil" />
                 </div>
-                <a href="">Berita</a>
+                <Link to="berita">Berita</Link>
                 <div className="relative cursor-pointer">
                     <DropdownMenu menu="Galeri" />
                 </div>
-                <a href="">Lab. IPA</a>
-                <a href="">Ekstrakulikuler</a>
-                <a href="">Perpustakaan</a>
-                <a href="">Kontak</a>
-                <a href="">Pengaduan</a>
+                <a href="https://sites.google.com/view/labipasmpn20semarang" target="_blank">
+                    Lab. IPA
+                </a>
+                <Link to="ekstrakulikuler">Ekstrakulikuler</Link>
+                <a href="https://pustaka20.smpn20.semarangkota.go.id/" target="_blank">
+                    Perpustakaan
+                </a>
+                <Link to="kontak">Kontak</Link>
+                <Link to="pengaduan">Pengaduan</Link>
             </div>
             <div className="login bg-smporange text-white px-5 py-2 rounded-full">
                 <a href="">Login</a>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const DropdownMenu = ({ menu }) => {
     const [isClicked, setIsClicked] = useState(false);
@@ -25,19 +26,19 @@ const DropdownMenu = ({ menu }) => {
             >
                 {menu === "Profil" ? (
                     <>
-                        <LinkDropdown name="Profil Sekolah" link="" />
-                        <LinkDropdown name="Visi & Misi" link="" />
-                        <LinkDropdown name="Profil Guru & Karyawan" link="" />
-                        <LinkDropdown name="Profil Siswa" link="" />
-                        <LinkDropdown name="Sarana & Prasarana" link="" />
-                        <LinkDropdown name="Struktur Organisasi" link="" />
-                        <LinkDropdown name="Prestasi" link="" />
+                        <LinkDropdown name="Profil Sekolah" link="profilSekolah" />
+                        <LinkDropdown name="Visi & Misi" link="visiMisi" />
+                        <LinkDropdown name="Profil Guru & Karyawan" link="profilGuruKaryawan" />
+                        {/* <LinkDropdown name="Profil Siswa" link="" /> */}
+                        <LinkDropdown name="Sarana & Prasarana" link="sarana" />
+                        <LinkDropdown name="Struktur Organisasi" link="struktur" />
+                        <LinkDropdown name="Prestasi" link="prestasi" />
                     </>
                 ) : (
                     <>
-                        <LinkDropdown name="Galeri Foto" link="" />
-                        <LinkDropdown name="Galeri Video" link="" />
-                        <LinkDropdown name="Galeri Prestasi Siswa" link="" />
+                        <LinkDropdown name="Galeri Foto" link="galeriFoto" />
+                        <LinkDropdown name="Galeri Video" link="galeriVideo" />
+                        <LinkDropdown name="Galeri Prestasi Siswa" link="galeriPrestasi" />
                     </>
                 )}
             </div>
@@ -47,12 +48,12 @@ const DropdownMenu = ({ menu }) => {
 
 const LinkDropdown = ({ name, link }) => {
     return (
-        <a
-            href={link}
+        <Link
+            to={link}
             className="py-2 px-4 hover:bg-smporange hover:text-white transition-all duration-100"
         >
             {name}
-        </a>
+        </Link>
     );
 };
 
