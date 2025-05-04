@@ -1,4 +1,4 @@
-import { supabase } from "@/config/db";
+import { supabase } from '../config/db';
 
 
 export const signInWithGoogle = async () => {

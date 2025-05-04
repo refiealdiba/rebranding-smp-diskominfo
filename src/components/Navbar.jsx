@@ -1,3 +1,4 @@
+import { signInWithGoogle } from "../services/auth";
 import DropdownMenu from "./Home/DropdownMenu";
 
 const Navbar = () => {
@@ -24,7 +25,7 @@ const Navbar = () => {
                 <a href="">Pengaduan</a>
             </div>
             <div className="login bg-smporange text-white px-5 py-2 rounded-full">
-                <a href="">Login</a>
+                <button onClick={() => {signInWithGoogle()}}>Login</button>
             </div>
         </div>
     );
