@@ -12,6 +12,19 @@ export const getArticles = async () => {
     return data
 }
 
+export const getArticleLatest = async (limit) => {
+    const { data, error } = await supabase
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(limit)
+    if (error) {
+        console.error('Error fetching latest article:', error)
+        return null
+    }
+    return data
+}
+
 export const getArticleById = async (id) => {
     const { data, error } = await supabase
         .from('articles')
