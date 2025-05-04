@@ -10,6 +10,7 @@ const BeritaBaruList = () => {
             try {
                 const data = await getArticleLatest(8);
                 setArticleDataLatest(data);
+                console.log(data);
             } catch (error) {
                 console.error(error);
             }

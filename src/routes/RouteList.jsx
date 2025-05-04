@@ -5,6 +5,7 @@ import MainLayout from "../components/layouts/MainLayout";
 import ProfilSmp from "../pages/ProfilSmp";
 import VisiMisi from "../pages/VisiMisi";
 import Berita from "../pages/Berita";
+import BeritaDetail from "../pages/BeritaDetail";
 import Sarana from "../pages/Sarana";
 import Struktur from "../pages/Struktur";
 import NotFound from "../pages/NotFound";
@@ -62,6 +63,10 @@ const RouteList = createBrowserRouter([
             {
                 path: "berita",
                 element: <Berita />,
+            },
+            {
+                path: "berita/:id",
+                element: <BeritaDetail />,
             },
             {
                 path: "galeriFoto",
