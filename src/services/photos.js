@@ -12,6 +12,19 @@ export const getPhotos = async () => {
   return data;
 };
 
+export const getPhotoLatest = async (limit) => {
+  const { data, error } = await supabase
+    .from("photos")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) {
+    console.error("Error fetching latest photo:", error);
+    return null;
+  }
+  return data;
+};
+
 export const getPhotoById = async (id) => {
   const { data, error } = await supabase
     .from("photos")
