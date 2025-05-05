@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../pages/home";
+import Home from "../pages/Home";
 import Test from "../pages/test";
 import MainLayout from "../components/layouts/MainLayout";
 import ProfilSmp from "../pages/ProfilSmp";
@@ -17,6 +17,7 @@ import Ekskul from "../pages/Ekskul";
 import Pengaduan from "../pages/Pengaduan";
 import Prestasi from "../pages/Prestasi";
 import ProfilGuru from "../pages/ProfilGuru";
+import GaleriFotoDetail from "../pages/GaleriFotoDetail";
 
 import HomeAdmin from "../pages/Admin/HomeAdmin";
 import Users from "../pages/Admin/Users";
@@ -26,6 +27,8 @@ import Achievements from "../pages/Admin/Achievements";
 import Photos from "../pages/Admin/Photos";
 import PhotoDetails from "../pages/Admin/PhotoDetails";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
+import GuruKaryawanAdmin from "../pages/Admin/GuruKaryawanAdmin";
+import FormAddArticle from "../components/Admin/FormAddArticle";
 
 const RouteList = createBrowserRouter([
   {
@@ -73,6 +76,10 @@ const RouteList = createBrowserRouter([
         element: <GaleriFoto />,
       },
       {
+        path: "galeriFoto/:id",
+        element: <GaleriFotoDetail />,
+      },
+      {
         path: "galeriVideo",
         element: <GaleriVideo />,
       },
@@ -111,32 +118,32 @@ const RouteList = createBrowserRouter([
         element: <HomeAdmin />,
       },
       {
-        path: "test",
-        element: <Test />,
+        path: "guruKaryawan",
+        element: <GuruKaryawanAdmin />,
       },
       {
-        path: "users",
-        element: <Users />,
+        path: "guruKaryawan/add",
+        element: <FormAddArticle />,
       },
       {
         path: "articles",
         element: <Articles />,
       },
       {
-        path: "videos",
-        element: <Videos />,
+        path: "galeriFoto",
+        element: <Articles />,
       },
       {
-        path: "achievements",
-        element: <Achievements />,
+        path: "galeriVideo",
+        element: <Articles />,
       },
       {
-        path: "photos",
-        element: <Photos />,
+        path: "galeriPrestasi",
+        element: <Articles />,
       },
       {
-        path: "photo-details",
-        element: <PhotoDetails />,
+        path: "pengaduan",
+        element: <Articles />,
       },
     ],
   },

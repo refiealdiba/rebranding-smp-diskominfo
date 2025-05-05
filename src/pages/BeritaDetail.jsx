@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getArticleById } from "../services/articles";
+import cleanText from "../middleware/cleanText";
 
 const BeritaDetail = () => {
     const { id } = useParams();
@@ -39,7 +40,7 @@ const BeritaDetail = () => {
                     />
                 </div>
                 <p className="text-justify text-sm md:text-base leading-relaxed font-light text-gray-700">
-                    {article.content}
+                    {cleanText(article.content)}
                 </p>
             </div>
         </div>

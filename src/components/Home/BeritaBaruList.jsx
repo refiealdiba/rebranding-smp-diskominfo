@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getArticleLatest } from "../../services/articles";
+import formatDate from "../../middleware/formatDate";
 import { Link } from "react-router-dom";
 
 const BeritaBaruList = () => {
@@ -10,7 +11,6 @@ const BeritaBaruList = () => {
             try {
                 const data = await getArticleLatest(8);
                 setArticleDataLatest(data);
-                console.log(data);
             } catch (error) {
                 console.error(error);
             }
@@ -25,7 +25,7 @@ const BeritaBaruList = () => {
                 <Link
                     key={index}
                     to={`/berita/${article.id}`}
-                    className=" rounded-lg drop-shadow-lg hover:shadow-md overflow-hidden bg-white transition-all duration-300 ease-in-out"
+                    className="flex flex-col h-full rounded-lg drop-shadow-lg hover:shadow-md overflow-hidden bg-white transition-all duration-300 ease-in-out"
                 >
                     <div className="w-full h-40">
                         <img
@@ -34,7 +34,7 @@ const BeritaBaruList = () => {
                             className="w-full h-full object-cover"
                         />
                     </div>
-                    <div className="p-4 font-poppins ">
+                    <div className="flex flex-col flex-grow p-4 font-poppins">
                         <p className="font-medium text-xs text-smpgray">
                             {formatDate(article.created_at)}
                         </p>
@@ -43,79 +43,16 @@ const BeritaBaruList = () => {
                                 ? `${article.title.substring(0, 50)}...`
                                 : article.title}
                         </p>
+                        <div className="mt-auto pt-2">
+                            <p className="font-semibold text-xs text-smporange">
+                                Baca selengkapnya
+                            </p>
+                        </div>
                     </div>
-                    <p className="font-semibold text-xs text-smporange px-4 pt-2 pb-5">
-                        Baca selengkapnya
-                    </p>
-                </Link>
-            ))}
-            {articleDataLatest.map((article, index) => (
-                <Link
-                    key={index}
-                    to={`/berita/${article.id}`}
-                    className=" rounded-lg drop-shadow-lg hover:shadow-md overflow-hidden bg-white transition-all duration-300 ease-in-out"
-                >
-                    <div className="w-full h-40">
-                        <img
-                            src={article.thumbnail}
-                            alt={article.title}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                    <div className="p-4 font-poppins ">
-                        <p className="font-medium text-xs text-smpgray">
-                            {formatDate(article.created_at)}
-                        </p>
-                        <p className="font-bold text-base text-smpblack">
-                            {article.title.length > 50
-                                ? `${article.title.substring(0, 50)}...`
-                                : article.title}
-                        </p>
-                    </div>
-                    <p className="font-semibold text-xs text-smporange px-4 pt-2 pb-5">
-                        Baca selengkapnya
-                    </p>
-                </Link>
-            ))}
-            {articleDataLatest.map((article, index) => (
-                <Link
-                    key={index}
-                    to={`/berita/${article.id}`}
-                    className=" rounded-lg drop-shadow-lg hover:shadow-md overflow-hidden bg-white transition-all duration-300 ease-in-out"
-                >
-                    <div className="w-full h-40">
-                        <img
-                            src={article.thumbnail}
-                            alt={article.title}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                    <div className="p-4 font-poppins ">
-                        <p className="font-medium text-xs text-smpgray">
-                            {formatDate(article.created_at)}
-                        </p>
-                        <p className="font-bold text-base text-smpblack">
-                            {article.title.length > 50
-                                ? `${article.title.substring(0, 50)}...`
-                                : article.title}
-                        </p>
-                    </div>
-                    <p className="font-semibold text-xs text-smporange px-4 pt-2 pb-5">
-                        Baca selengkapnya
-                    </p>
                 </Link>
             ))}
         </div>
     );
-};
-
-const formatDate = (isoDateString) => {
-    const date = new Date(isoDateString);
-    return date.toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-    });
 };
 
 export default BeritaBaruList;
