@@ -6,6 +6,8 @@ import {
   updateArticle,
   deleteArticle,
 } from "../../services/articles";
+import FormAddArticle from "../../components/Admin/FormAddArticle";
+
 
 const Articles = () => {
   const [articles, setArticles] = useState([]);
@@ -71,8 +73,8 @@ const Articles = () => {
   return (
     <div className="p-6 bg-white shadow rounded-lg min-h-screen">
       <h2 className="text-2xl font-bold text-smporange mb-4">Kelola Artikel</h2>
-
-      <button
+      <FormAddArticle></FormAddArticle>
+      {/* <button
         onClick={() => setShowAddForm(!showAddForm)}
         className={`mb-4 flex items-center gap-2 px-4 py-2 rounded font-medium text-white transition ${
           showAddForm
@@ -82,9 +84,9 @@ const Articles = () => {
       >
         {showAddForm ? <XCircle size={20} /> : <PlusCircle size={20} />}
         {showAddForm ? "Tutup Form" : "Tambah Artikel"}
-      </button>
+      </button> */}
 
-      {showAddForm && (
+      {/* {showAddForm && (
         <div className="mb-6 p-4 border rounded-lg bg-gray-50">
           <div className="grid md:grid-cols-3 gap-4">
             <input
@@ -113,7 +115,7 @@ const Articles = () => {
             Simpan Artikel
           </button>
         </div>
-      )}
+      )} */}
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-gray-100 shadow rounded-2xl overflow-hidden">
