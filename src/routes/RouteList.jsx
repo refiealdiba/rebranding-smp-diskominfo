@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../pages/home";
+import Home from "../pages/Home";
 import Test from "../pages/test";
 import MainLayout from "../components/layouts/MainLayout";
 import ProfilSmp from "../pages/ProfilSmp";
@@ -29,7 +29,6 @@ import PhotoDetails from "../pages/Admin/PhotoDetails";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
 
 const RouteList = createBrowserRouter([
-<<<<<<< HEAD
     {
         path: "/",
         element: <MainLayout />,
@@ -148,124 +147,8 @@ const RouteList = createBrowserRouter([
     },
     {
         path: "*", // Fallback 404 global jika struktur rute diubah
-=======
-  {
-    path: "/",
-    element: <MainLayout />,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "profilSekolah",
-        element: <ProfilSmp />,
-      },
-      {
-        path: "visiMisi",
-        element: <VisiMisi />,
-      },
-      {
-        path: "profilGuruKaryawan",
-        element: <ProfilGuru />,
-      },
-      {
-        path: "sarana",
-        element: <Sarana />,
-      },
-      {
-        path: "struktur",
-        element: <Struktur />,
-      },
-      {
-        path: "prestasi",
-        element: <Prestasi />,
-      },
-      {
-        path: "berita",
-        element: <Berita />,
-      },
-      {
-        path: "berita/:id",
-        element: <BeritaDetail />,
-      },
-      {
-        path: "galeriFoto",
-        element: <GaleriFoto />,
-      },
-      {
-        path: "galeriVideo",
-        element: <GaleriVideo />,
-      },
-      {
-        path: "galeriPrestasi",
-        element: <GaleriPrestasi />,
-      },
-      {
-        path: "ekstrakulikuler",
-        element: <Ekskul />,
-      },
-      {
-        path: "kontak",
-        element: <Kontak />,
-      },
-      {
-        path: "pengaduan",
-        element: <Pengaduan />,
-      },
-      {
-        path: "test",
-        element: <Test />,
-      },
-      {
-        path: "*", // 404 fallback untuk route dalam MainLayout
->>>>>>> fba73f0197460fd820d557289d4403d27ceb1598
         element: <NotFound />,
-      },
-    ],
-  },
-  {
-    path: "/admin",
-    element: <AdminDashboard />,
-    children: [
-      {
-        index: true,
-        element: <HomeAdmin />,
-      },
-      {
-        path: "test",
-        element: <Test />,
-      },
-      {
-        path: "users",
-        element: <Users />,
-      },
-      {
-        path: "articles",
-        element: <Articles />,
-      },
-      {
-        path: "videos",
-        element: <Videos />,
-      },
-      {
-        path: "achievements",
-        element: <Achievements />,
-      },
-      {
-        path: "photos",
-        element: <Photos />,
-      },
-      {
-        path: "photo-details",
-        element: <PhotoDetails />,
-      },
-    ],
-  },
-  {
-    path: "*", // Fallback 404 global jika struktur rute diubah
-    element: <NotFound />,
-  },
+    },
 ]);
 
 export default RouteList;

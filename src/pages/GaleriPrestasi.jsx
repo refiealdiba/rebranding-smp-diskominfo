@@ -1,24 +1,26 @@
 const GaleriPrestasi = () => {
     return (
-        <div className="flex flex-col items-center gap-16 px-4 py-12 font-poppins">
-            <h1 className="font-bold text-center text-3xl md:text-4xl">
+        <div className="flex flex-col items-center gap-12 px-4 py-12 font-poppins">
+            <h1 className="font-bold text-center text-3xl md:text-4xl leading-snug">
                 Galeri Prestasi <span className="text-smporange">SMP Negeri 20 Semarang</span>
             </h1>
 
-            <div className="w-full max-w-3xl flex flex-col gap-8">
+            <div className="w-full max-w-2xl flex flex-col gap-8">
                 {dummyPrestasi.map((item) => (
                     <div
                         key={item.id}
-                        className="flex flex-col md:flex-row bg-white rounded-xl shadow-md overflow-hidden font-poppins"
+                        className="flex flex-col md:flex-row bg-white rounded-xl shadow-md overflow-hidden"
                     >
                         <img
                             src={item.image}
                             alt="prestasi"
-                            className="w-full md:w-56 md:h-56 object-cover"
+                            className="w-full h-60 md:w-48 md:h-auto object-cover"
                         />
-                        <div className="flex flex-col items-start text-left p-4 gap-2 md:w-[calc(100%-14rem)]">
+                        <div className="flex flex-col justify-start p-4 gap-2">
                             <p className="text-xs text-smpgray font-medium">{item.date}</p>
-                            <p className="text-sm text-black font-medium">{item.description}</p>
+                            <p className="text-sm md:text-base text-black font-medium">
+                                {item.description}
+                            </p>
                         </div>
                     </div>
                 ))}
