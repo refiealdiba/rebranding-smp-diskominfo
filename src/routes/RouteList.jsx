@@ -27,6 +27,7 @@ import Achievements from "../pages/Admin/Achievements";
 import Photos from "../pages/Admin/Photos";
 import PhotoDetails from "../pages/Admin/PhotoDetails";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
+import GuruKaryawanAdmin from "../pages/Admin/GuruKaryawanAdmin";
 
 const RouteList = createBrowserRouter([
     {
@@ -116,32 +117,28 @@ const RouteList = createBrowserRouter([
                 element: <HomeAdmin />,
             },
             {
-                path: "test",
-                element: <Test />,
+                path: "guruKaryawan",
+                element: <GuruKaryawanAdmin />,
             },
             {
-                path: "users",
+                path: "berita",
                 element: <Users />,
             },
             {
-                path: "articles",
+                path: "galeriFoto",
                 element: <Articles />,
             },
             {
-                path: "videos",
-                element: <Videos />,
+                path: "galeriVideo",
+                element: <Articles />,
             },
             {
-                path: "achievements",
-                element: <Achievements />,
+                path: "galeriPrestasi",
+                element: <Articles />,
             },
             {
-                path: "photos",
-                element: <Photos />,
-            },
-            {
-                path: "photoDetails",
-                element: <PhotoDetails />,
+                path: "pengaduan",
+                element: <Articles />,
             },
         ],
     },

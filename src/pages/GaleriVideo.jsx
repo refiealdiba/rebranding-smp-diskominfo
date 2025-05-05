@@ -1,4 +1,18 @@
+import { useState, useEffect } from "react";
+import { getVideos } from "../services/videos";
+
 const GaleriVideo = () => {
+    const [dataVideo, setDataVideo] = useState([]);
+
+    useEffect(() => {
+        const getAllVideos = async () => {
+            const videos = await getVideos();
+            setDataVideo(videos);
+            console.log(videos);
+        };
+        getAllVideos();
+    }, []);
+
     return (
         <div className="flex flex-col items-center gap-16 px-3 py-12">
             <div className="font-poppins font-bold flex flex-col gap-7">
@@ -12,9 +26,9 @@ const GaleriVideo = () => {
                         key={index}
                         className="bg-white rounded-lg shadow-lg overflow-hidden w-[300px] mx-auto flex flex-col"
                     >
-                        <a href={data.link} target="_blank" rel="noopener noreferrer">
+                        <a href={data.link_embed} target="_blank" rel="noopener noreferrer">
                             <img
-                                src={getYouTubeThumbnail(data.link)}
+                                src={getYouTubeThumbnail(data.link_embed)}
                                 alt={data.title}
                                 className="w-full h-[170px] object-cover"
                             />
@@ -30,26 +44,12 @@ const GaleriVideo = () => {
 };
 
 const getYouTubeThumbnail = (url) => {
+    const cleanUrl = url.trim(); // hapus spasi awal dan akhir
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
+    const match = cleanUrl.match(regExp);
     const videoId = match && match[2].length === 11 ? match[2] : null;
 
     return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
 };
-
-const dataVideo = [
-    {
-        title: "IMPLEMENTASI P5 TEMA BHINNEKA TUNGGAL IKA SMPN 20 SEMARANG TAHUN 2022",
-        link: "https://www.youtube.com/watch?v=Cx6WM1rQfVY",
-    },
-    {
-        title: "PAMERAN PENDIDIKAN TAHUN 2022",
-        link: "https://www.youtube.com/watch?v=RlSEmTFuUSE",
-    },
-    {
-        title: "Penampilan Tari Semarangan Kelas 9 SMP Negeri 20 Semarang Tahun 2022",
-        link: "https://www.youtube.com/watch?v=0fCopYtr5h8",
-    },
-];
 
 export default GaleriVideo;

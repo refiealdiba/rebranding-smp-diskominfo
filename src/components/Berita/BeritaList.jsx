@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getArticles } from "../../services/articles";
+import cleanText from "../../middleware/cleanText";
 
 const BeritaList = () => {
     const [articleData, setArticleData] = useState([]);
@@ -46,7 +47,7 @@ const BeritaList = () => {
                                 {article.title}
                             </h2>
                             <p className="text-sm md:text-base font-normal text-gray-700 line-clamp-4">
-                                {article.content}
+                                {cleanText(article.content)}
                             </p>
                             <Link
                                 to={`/berita/${article.id}`}

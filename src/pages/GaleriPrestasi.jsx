@@ -1,4 +1,20 @@
+import { useState, useEffect } from "react";
+import { getAchivements } from "../services/achievements";
+import formatDate from "../middleware/formatDate";
+import cleanText from "../middleware/cleanText";
+
 const GaleriPrestasi = () => {
+    const [dataPrestasi, setDataPrestasi] = useState([]);
+
+    useEffect(() => {
+        const getAllAchivements = async () => {
+            const prestasi = await getAchivements();
+            setDataPrestasi(prestasi);
+            console.log(prestasi);
+        };
+        getAllAchivements();
+    }, []);
+
     return (
         <div className="flex flex-col items-center gap-12 px-4 py-12 font-poppins">
             <h1 className="font-bold text-center text-3xl md:text-4xl leading-snug">
@@ -6,20 +22,24 @@ const GaleriPrestasi = () => {
             </h1>
 
             <div className="w-full max-w-2xl flex flex-col gap-8">
-                {dummyPrestasi.map((item) => (
+                {dataPrestasi.map((item) => (
                     <div
                         key={item.id}
                         className="flex flex-col md:flex-row bg-white rounded-xl shadow-md overflow-hidden"
                     >
-                        <img
-                            src={item.image}
-                            alt="prestasi"
-                            className="w-full h-60 md:w-48 md:h-auto object-cover"
-                        />
+                        <div className="w-full md:w-48 h-60 md:h-48 shrink-0">
+                            <img
+                                src={item.photo}
+                                alt="prestasi"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
                         <div className="flex flex-col justify-start p-4 gap-2">
-                            <p className="text-xs text-smpgray font-medium">{item.date}</p>
+                            <p className="text-xs text-smpgray font-medium">
+                                {formatDate(item.created_at)}
+                            </p>
                             <p className="text-sm md:text-base text-black font-medium">
-                                {item.description}
+                                {cleanText(item.title)}
                             </p>
                         </div>
                     </div>
@@ -28,36 +48,5 @@ const GaleriPrestasi = () => {
         </div>
     );
 };
-
-const dummyPrestasi = [
-    {
-        id: 1,
-        date: "12 Oktober 2024",
-        image: "https://source.unsplash.com/600x400/?student,award",
-        description:
-            "Evan Tri Ananta Putra (Kelas 8A) meraih Juara 1 Kategori Laga kelas F Putra Pra Remaja dalam Kejuaraan Silat Festival Dji Pilka Kepada SMA Pangudi Luhur dan Basko Semarang Tahun 2024.",
-    },
-    {
-        id: 2,
-        date: "2 Oktober 2024",
-        image: "https://source.unsplash.com/600x400/?silat,champion",
-        description:
-            "Damar Restu Gumilang (kelas 8D) meraih Juara Harapan I pada Kejuaraan Prestasi Pencak Silat Kota Semarang. Jatuh di tangan Wahyu Utami (kelas 8C) meraih Juara 2 Kategori TGR REMAJA PUTRI pada kejuaraan Pencak Silat Kota Wall Championship.",
-    },
-    {
-        id: 3,
-        date: "21 September 2024",
-        image: "https://source.unsplash.com/600x400/?dance,student",
-        description:
-            "Athayya Khansa Pahladis S. (kelas 8B) dan Syarahatus Sabirin P. (kelas 9H) meraih Juara I pada LOMBA TARI GOLEK se-SMP TINGKAT KOTA SEMARANG.",
-    },
-    {
-        id: 4,
-        date: "9 Oktober 2024",
-        image: "https://source.unsplash.com/600x400/?award,student",
-        description:
-            "Dinda Arinza Zevilla Renzi (kelas 8D) meraih Juara III Tanding Kelas C Putri Tingkat Pra Remaja pada Kejuaraan Pencak Silat Tugumuda Championship V Tingkat Nasional Tahun 2024.",
-    },
-];
 
 export default GaleriPrestasi;
