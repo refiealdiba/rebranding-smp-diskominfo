@@ -1,21 +1,25 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { PlusCircle, XCircle } from "lucide-react";
+import {
+  getEmployees,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
+} from "../../services/employee";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({
-    username: "",
-    email: "",
+    name: "",
+    position: "",
     photo: "",
   });
 
   const [showForm, setShowForm] = useState(false);
   const [newUser, setNewUser] = useState({
-    username: "",
-    email: "",
-    password: "",
+    name: "",
+    position: "",
     photo: "",
   });
 
@@ -24,64 +28,50 @@ const Users = () => {
   }, []);
 
   const fetchUsers = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/users");
-      setUsers(res.data);
-    } catch (error) {
-      console.error("Gagal ambil data:", error);
-    }
+    const data = await getEmployees();
+    setUsers(data);
   };
 
   const handleAddUser = async () => {
-    if (!newUser.username || !newUser.email || !newUser.password) {
-      return alert("Username, email, dan password wajib diisi.");
+    if (!newUser.name || !newUser.position) {
+      return alert("Nama dan Posisi wajib diisi.");
     }
 
-    try {
-      const res = await axios.post("http://localhost:5000/api/users", newUser);
-      setUsers([...users, res.data]);
-      setNewUser({ username: "", email: "", password: "", photo: "" });
+    const data = await createEmployee(newUser.name, newUser.position);
+    if (data) {
+      fetchUsers();
+      setNewUser({ name: "", position: "", photo: "" });
       setShowForm(false);
-    } catch (error) {
-      console.error("Gagal menambahkan pengguna:", error);
     }
   };
 
   const handleEdit = (user) => {
     setEditId(user.id);
     setEditData({
-      username: user.username,
-      email: user.email,
+      name: user.name,
+      position: user.position,
       photo: user.photo || "",
     });
   };
 
   const handleSave = async () => {
-    try {
-      await axios.put(`http://localhost:5000/api/users/${editId}`, editData);
-      setUsers(users.map((u) => (u.id === editId ? { ...u, ...editData } : u)));
+    const data = await updateEmployee(editId, editData.name, editData.position);
+    if (data) {
+      fetchUsers();
       setEditId(null);
-    } catch (error) {
-      console.error("Gagal update pengguna:", error);
     }
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Yakin ingin menghapus pengguna ini?")) {
-      try {
-        await axios.delete(`http://localhost:5000/api/users/${id}`);
-        setUsers(users.filter((u) => u.id !== id));
-      } catch (error) {
-        console.error("Gagal hapus pengguna:", error);
-      }
+      const data = await deleteEmployee(id);
+      if (data) fetchUsers();
     }
   };
 
   return (
     <div className="p-6 bg-white shadow rounded-lg min-h-screen">
-      <h2 className="text-2xl font-bold text-smporange mb-4">
-        Kelola Pengguna
-      </h2>
+      <h2 className="text-2xl font-bold text-smporange mb-4">Kelola Pegawai</h2>
 
       <button
         onClick={() => setShowForm(!showForm)}
@@ -92,36 +82,25 @@ const Users = () => {
         }`}
       >
         {showForm ? <XCircle size={20} /> : <PlusCircle size={20} />}
-        {showForm ? "Tutup Form" : "Tambah Pengguna"}
+        {showForm ? "Tutup Form" : "Tambah Pegawai"}
       </button>
 
       {showForm && (
         <div className="mb-6 p-4 border rounded-lg bg-gray-50">
-          <div className="grid md:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             <input
               type="text"
-              placeholder="Username"
-              value={newUser.username}
-              onChange={(e) =>
-                setNewUser({ ...newUser, username: e.target.value })
-              }
+              placeholder="Nama"
+              value={newUser.name}
+              onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
               className="border px-3 py-2 rounded w-full"
             />
             <input
-              type="email"
-              placeholder="Email"
-              value={newUser.email}
+              type="text"
+              placeholder="Posisi"
+              value={newUser.position}
               onChange={(e) =>
-                setNewUser({ ...newUser, email: e.target.value })
-              }
-              className="border px-3 py-2 rounded w-full"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={newUser.password}
-              onChange={(e) =>
-                setNewUser({ ...newUser, password: e.target.value })
+                setNewUser({ ...newUser, position: e.target.value })
               }
               className="border px-3 py-2 rounded w-full"
             />
@@ -139,7 +118,7 @@ const Users = () => {
             onClick={handleAddUser}
             className="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
           >
-            Simpan Pengguna
+            Simpan Pegawai
           </button>
         </div>
       )}
@@ -149,10 +128,10 @@ const Users = () => {
           <thead className="bg-smporange text-white">
             <tr>
               <th className="px-6 py-3 text-left text-sm font-semibold">
-                Username
+                Nama
               </th>
               <th className="px-6 py-3 text-left text-sm font-semibold">
-                Email
+                Posisi
               </th>
               <th className="px-6 py-3 text-left text-sm font-semibold">
                 Foto
@@ -171,33 +150,33 @@ const Users = () => {
                 <td className="px-6 py-4">
                   {editId === u.id ? (
                     <input
-                      value={editData.username}
+                      value={editData.name}
                       onChange={(e) =>
-                        setEditData({ ...editData, username: e.target.value })
+                        setEditData({ ...editData, name: e.target.value })
                       }
                       className="border px-3 py-1 w-full rounded-md"
                     />
                   ) : (
-                    <span className="font-medium">{u.username}</span>
+                    <span className="font-medium">{u.name}</span>
                   )}
                 </td>
                 <td className="px-6 py-4">
                   {editId === u.id ? (
                     <input
-                      value={editData.email}
+                      value={editData.position}
                       onChange={(e) =>
-                        setEditData({ ...editData, email: e.target.value })
+                        setEditData({ ...editData, position: e.target.value })
                       }
                       className="border px-3 py-1 w-full rounded-md"
                     />
                   ) : (
-                    u.email
+                    u.position
                   )}
                 </td>
                 <td className="px-6 py-4">
                   <img
                     src={u.photo || "https://via.placeholder.com/50"}
-                    alt="User"
+                    alt="Foto"
                     className="w-10 h-10 rounded-full object-cover border"
                   />
                 </td>
@@ -229,7 +208,7 @@ const Users = () => {
             {users.length === 0 && (
               <tr>
                 <td colSpan="4" className="text-center py-4 text-gray-500">
-                  Tidak ada pengguna.
+                  Tidak ada pegawai.
                 </td>
               </tr>
             )}

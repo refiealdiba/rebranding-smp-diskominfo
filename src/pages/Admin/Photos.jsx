@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { PlusCircle, XCircle } from "lucide-react";
+import {
+  getPhotos,
+  createPhoto,
+  updatePhoto,
+  deletePhoto,
+} from "../../services/photos";
 
 const Photos = () => {
   const [photos, setPhotos] = useState([]);
   const [editId, setEditId] = useState(null);
-  const [editData, setEditData] = useState({
-    title: "",
-    thumbnail: "",
-  });
-
-  const [newPhoto, setNewPhoto] = useState({
-    title: "",
-    thumbnail: "",
-  });
-
+  const [editData, setEditData] = useState({ title: "", url: "" });
+  const [newPhoto, setNewPhoto] = useState({ title: "", url: "" });
   const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
@@ -22,56 +19,45 @@ const Photos = () => {
   }, []);
 
   const fetchPhotos = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/photos");
-      setPhotos(res.data);
-    } catch (error) {
-      console.error("Gagal ambil foto:", error);
-    }
+    const data = await getPhotos();
+    setPhotos(data);
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Yakin ingin menghapus foto ini?")) {
-      try {
-        await axios.delete(`http://localhost:5000/api/photos/${id}`);
+      const deleted = await deletePhoto(id);
+      if (deleted) {
         setPhotos(photos.filter((p) => p.id !== id));
-      } catch (error) {
-        console.error("Gagal hapus foto:", error);
       }
     }
   };
 
   const handleEdit = (photo) => {
     setEditId(photo.id);
-    setEditData({
-      title: photo.title,
-      thumbnail: photo.thumbnail,
-    });
+    setEditData({ title: photo.title, url: photo.url });
   };
 
   const handleSave = async () => {
-    try {
-      await axios.put(`http://localhost:5000/api/photos/${editId}`, editData);
+    const updated = await updatePhoto(editId, editData.title, editData.url);
+    if (updated) {
       setPhotos(
         photos.map((p) => (p.id === editId ? { ...p, ...editData } : p))
       );
       setEditId(null);
-    } catch (error) {
-      console.error("Gagal update foto:", error);
     }
   };
 
   const handleAddPhoto = async () => {
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/photos",
-        newPhoto
-      );
-      setPhotos([...photos, res.data]);
-      setNewPhoto({ title: "", thumbnail: "" });
+    if (!newPhoto.title || !newPhoto.url) {
+      alert("Judul dan URL tidak boleh kosong.");
+      return;
+    }
+
+    const added = await createPhoto(newPhoto.title, newPhoto.url);
+    if (added) {
+      fetchPhotos();
+      setNewPhoto({ title: "", url: "" });
       setShowAddForm(false);
-    } catch (error) {
-      console.error("Gagal tambah foto:", error);
     }
   };
 
@@ -108,9 +94,9 @@ const Photos = () => {
             <input
               type="text"
               placeholder="Thumbnail URL"
-              value={newPhoto.thumbnail}
+              value={newPhoto.url}
               onChange={(e) =>
-                setNewPhoto({ ...newPhoto, thumbnail: e.target.value })
+                setNewPhoto({ ...newPhoto, url: e.target.value })
               }
               className="border px-3 py-2 rounded w-full"
             />
@@ -161,15 +147,15 @@ const Photos = () => {
                 <td className="px-6 py-4">
                   {editId === p.id ? (
                     <input
-                      value={editData.thumbnail}
+                      value={editData.url}
                       onChange={(e) =>
-                        setEditData({ ...editData, thumbnail: e.target.value })
+                        setEditData({ ...editData, url: e.target.value })
                       }
                       className="border px-3 py-1 w-full rounded-md"
                     />
                   ) : (
                     <img
-                      src={p.thumbnail}
+                      src={p.url}
                       alt="thumbnail"
                       className="w-12 h-12 object-cover rounded shadow"
                     />

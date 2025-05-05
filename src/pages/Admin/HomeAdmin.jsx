@@ -8,7 +8,6 @@ export default function Home() {
         Selamat datang di halaman dashboard utama!
       </p>
 
-      {/* Highlight Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-white p-4 shadow rounded-2xl border-l-4 border-blue-500">
           <h2 className="text-lg font-semibold mb-2">Total Users</h2>
@@ -24,7 +23,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Informasi Sekolah */}
       <div className="bg-white p-6 rounded-2xl shadow">
         <h2 className="text-xl font-semibold text-gray-800 mb-3">
           Tentang Sekolah
