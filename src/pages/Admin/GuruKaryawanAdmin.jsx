@@ -51,14 +51,14 @@ const GuruKaryawanAdmin = () => {
 
                 <div className="bg-white rounded-xl p-4 shadow-2xl overflow-x-auto">
                     <h2 className="font-semibold text-md mb-4">Tabel Guru dan Karyawan</h2>
-                    <table className="table-auto w-full text-sm border-collapse">
+                    <table className="min-w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
                         <thead>
-                            <tr className="bg-gray-100 text-left">
-                                <th className="px-4 py-2 border">No.</th>
-                                <th className="px-4 py-2 border">Foto</th>
-                                <th className="px-4 py-2 border">Nama</th>
-                                <th className="px-4 py-2 border">Jabatan</th>
-                                <th className="px-4 py-2 border">Aksi</th>
+                            <tr className="bg-gray-100 text-left text-sm font-semibold text-gray-700">
+                                <th className="px-4 py-3 border">No.</th>
+                                <th className="px-4 py-3 border">Foto</th>
+                                <th className="px-4 py-3 border">Nama</th>
+                                <th className="px-4 py-3 border">Posisi</th>
+                                <th className="px-4 py-3 border">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,22 +67,34 @@ const GuruKaryawanAdmin = () => {
                                     <td className="px-4 py-2 border text-center">
                                         {startIndex + index + 1}
                                     </td>
-                                    <td className="px-4 py-2 border">
+                                    <td className="px-4 py-2 border text-center">
                                         <img
                                             src={item.photo}
                                             alt={item.name}
-                                            className="w-12 h-12 object-cover rounded-full"
+                                            className="w-32 h-40 object-cover rounded-lg mx-auto"
                                         />
                                     </td>
-                                    <td className="px-4 py-2 border">{item.name}</td>
-                                    <td className="px-4 py-2 border">{item.position}</td>
-                                    <td className="px-4 py-2 border flex gap-2">
-                                        <button className="bg-yellow-400 text-white px-2 py-1 rounded">
-                                            <Pencil size={14} />
-                                        </button>
-                                        <button className="bg-red-500 text-white px-2 py-1 rounded">
-                                            <Trash size={14} />
-                                        </button>
+                                    <td className="px-4 py-2 border font-medium text-gray-800">
+                                        {item.name}
+                                    </td>
+                                    <td className="px-4 py-2 border text-gray-700">
+                                        {item.position}
+                                    </td>
+                                    <td className="px-4 py-2 border">
+                                        <div className="flex items-center gap-2">
+                                            <button
+                                                className="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded"
+                                                title="Edit"
+                                            >
+                                                <Pencil size={16} />
+                                            </button>
+                                            <button
+                                                className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
+                                                title="Hapus"
+                                            >
+                                                <Trash size={16} />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

@@ -29,6 +29,7 @@ import PhotoDetails from "../pages/Admin/PhotoDetails";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
 import GuruKaryawanAdmin from "../pages/Admin/GuruKaryawanAdmin";
 import FormAddArticle from "../components/Admin/FormAddArticle";
+import FormAddKaryawan from "../components/Admin/FormAddKaryawan";
 
 const RouteList = createBrowserRouter([
     {
@@ -123,7 +124,7 @@ const RouteList = createBrowserRouter([
             },
             {
                 path: "guruKaryawan/add",
-                element: <FormAddArticle />,
+                element: <FormAddKaryawan />,
             },
             {
                 path: "berita",

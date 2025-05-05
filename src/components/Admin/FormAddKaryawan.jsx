@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { supabase } from "../../config/db";
 import { ImagePlus, UploadCloud } from "lucide-react";
+import { getLastIdEmployee } from "../../services/employee";
 
-const FormAddArticle = () => {
+const FormAddEmployee = () => {
     const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [imageUrl, setImageUrl] = useState("");
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
+    const [name, setName] = useState("");
+    const [position, setPosition] = useState("");
 
     const handleUpload = async (e) => {
         e.preventDefault();
@@ -21,30 +22,31 @@ const FormAddArticle = () => {
             const filePath = `${fileName}`;
 
             let { error: uploadError } = await supabase.storage
-                .from("thumbnail-article")
+                .from("employees")
                 .upload(filePath, image);
 
             if (uploadError) throw uploadError;
 
             const {
                 data: { publicUrl },
-            } = supabase.storage.from("thumbnail-article").getPublicUrl(filePath);
+            } = supabase.storage.from("employees").getPublicUrl(filePath);
 
             setImageUrl(publicUrl);
 
-            const { error } = await supabase.from("articles").insert([
+            const { error } = await supabase.from("employees").insert([
                 {
-                    title,
-                    content,
-                    thumbnail: publicUrl,
+                    id: (await getLastIdEmployee()) + 1,
+                    name,
+                    position,
+                    photo: publicUrl,
                 },
             ]);
 
             if (error) throw error;
 
             alert("Upload berhasil!");
-            setTitle("");
-            setContent("");
+            setName("");
+            setPosition("");
             setImage(null);
         } catch (error) {
             alert(error.message);
@@ -58,39 +60,38 @@ const FormAddArticle = () => {
             <div className="bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto space-y-6">
                 <h2 className="text-2xl font-bold text-smporange flex items-center gap-2">
                     <UploadCloud className="w-6 h-6" />
-                    Tambah Artikel Baru
+                    Tambah Data Guru/Karyawan
                 </h2>
 
                 <form onSubmit={handleUpload} className="space-y-5">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Judul Artikel
-                        </label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Nama</label>
                         <input
                             type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Masukkan judul artikel"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Masukkan nama"
                             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-smporange"
                         />
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Konten Artikel
+                            Posisi
                         </label>
-                        <textarea
-                            value={content}
-                            onChange={(e) => setContent(e.target.value)}
-                            placeholder="Tulis isi artikel di sini..."
-                            rows={6}
+                        <input
+                            type="text"
+                            value={position}
+                            onChange={(e) => setPosition(e.target.value)}
+                            placeholder="Masukkan posisi/jabatan"
+                            rows={3}
                             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-smporange"
                         />
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Thumbnail Artikel
+                            Foto Karyawan
                         </label>
                         <div className="flex items-center gap-4">
                             <label className="cursor-pointer flex items-center gap-2 bg-smporange text-white px-4 py-2 rounded-md hover:bg-orange-600 transition">
@@ -116,13 +117,13 @@ const FormAddArticle = () => {
                         className="flex items-center gap-2 bg-smporange hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <UploadCloud size={18} />
-                        {uploading ? "Mengupload..." : "Upload Artikel"}
+                        {uploading ? "Mengupload..." : "Upload Data"}
                     </button>
                 </form>
 
                 {imageUrl && (
                     <div className="mt-6 border-t pt-4">
-                        <h3 className="font-semibold text-gray-700 mb-2">Pratinjau Thumbnail:</h3>
+                        <h3 className="font-semibold text-gray-700 mb-2">Pratinjau Foto:</h3>
                         <img
                             src={imageUrl}
                             alt="Uploaded"
@@ -130,7 +131,12 @@ const FormAddArticle = () => {
                         />
                         <p className="mt-2 text-sm text-gray-500 break-all">
                             URL:{" "}
-                            <a href={imageUrl} className="text-blue-600 underline">
+                            <a
+                                href={imageUrl}
+                                className="text-blue-600 underline"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
                                 {imageUrl}
                             </a>
                         </p>
@@ -141,4 +147,4 @@ const FormAddArticle = () => {
     );
 };
 
-export default FormAddArticle;
+export default FormAddEmployee;

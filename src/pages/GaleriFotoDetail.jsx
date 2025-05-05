@@ -1,4 +1,26 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getPhotoById } from "../services/photos";
+
 const GaleriFotoDetail = () => {
+    const { id } = useParams();
+    const [dataFoto, setDataFoto] = useState(null);
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const data = await getPhotoById(id);
+                setDataFoto(data);
+                console.log(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getData();
+    }, [id]);
+
+    if (!dataFoto) return <p className="text-center py-10">Loading...</p>;
+
     return (
         <div className="flex flex-col items-center gap-10 py-10">
             <h1 className="font-poppins font-bold text-4xl max-w-md text-center">
@@ -16,11 +38,6 @@ const GaleriFotoDetail = () => {
             </div>
         </div>
     );
-};
-
-const dataFoto = {
-    title: "Placeholder title",
-    images: ["sarpras4.jpg", "sarpras7.jpg", "sarpras9.jpg", "sarpras10.jpg"],
 };
 
 export default GaleriFotoDetail;
