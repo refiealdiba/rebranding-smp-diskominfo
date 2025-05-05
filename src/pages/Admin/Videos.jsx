@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { PlusCircle, XCircle } from "lucide-react";
+import {
+  getVideos,
+  createVideo,
+  updateVideo,
+  deleteVideo,
+} from "../../services/videos";
 
 const Videos = () => {
   const [videos, setVideos] = useState([]);
@@ -10,26 +15,18 @@ const Videos = () => {
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    fetchVideos();
+    loadVideos();
   }, []);
 
-  const fetchVideos = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/videos");
-      setVideos(res.data);
-    } catch (error) {
-      console.error("Gagal ambil video:", error);
-    }
+  const loadVideos = async () => {
+    const data = await getVideos();
+    setVideos(data);
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Yakin ingin menghapus video ini?")) {
-      try {
-        await axios.delete(`http://localhost:5000/api/videos/${id}`);
-        setVideos(videos.filter((v) => v.id !== id));
-      } catch (error) {
-        console.error("Gagal hapus video:", error);
-      }
+      const res = await deleteVideo(id);
+      if (res) setVideos(videos.filter((v) => v.id !== id));
     }
   };
 
@@ -39,29 +36,22 @@ const Videos = () => {
   };
 
   const handleSave = async () => {
-    try {
-      await axios.put(`http://localhost:5000/api/videos/${editId}`, editData);
+    const res = await updateVideo(editId, editData.title, editData.url);
+    if (res) {
       setVideos(
         videos.map((v) => (v.id === editId ? { ...v, ...editData } : v))
       );
       setEditId(null);
-    } catch (error) {
-      console.error("Gagal update video:", error);
     }
   };
 
   const handleAdd = async () => {
     if (!newVideo.title.trim()) return alert("Judul video tidak boleh kosong.");
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/videos",
-        newVideo
-      );
-      setVideos([...videos, res.data]);
+    const res = await createVideo(newVideo.title, newVideo.url);
+    if (res) {
+      await loadVideos();
       setNewVideo({ title: "", url: "" });
       setShowForm(false);
-    } catch (error) {
-      console.error("Gagal tambah video:", error);
     }
   };
 
@@ -166,12 +156,20 @@ const Videos = () => {
                 </td>
                 <td className="px-6 py-4 text-center">
                   {editId === v.id ? (
-                    <button
-                      onClick={handleSave}
-                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mr-2"
-                    >
-                      Simpan
-                    </button>
+                    <>
+                      <button
+                        onClick={handleSave}
+                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mr-2"
+                      >
+                        Simpan
+                      </button>
+                      <button
+                        onClick={() => setEditId(null)}
+                        className="bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded"
+                      >
+                        Batal
+                      </button>
+                    </>
                   ) : (
                     <button
                       onClick={() => handleEdit(v)}

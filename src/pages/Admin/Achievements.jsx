@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { PlusCircle, XCircle } from "lucide-react";
+import {
+  getAchivements,
+  createAchivement,
+  updateAchivement,
+  deleteAchivement,
+} from "../../services/achievements";
 
 const Achievements = () => {
   const [achievements, setAchievements] = useState([]);
@@ -17,21 +22,15 @@ const Achievements = () => {
   }, []);
 
   const fetchAchievements = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/achievements");
-      setAchievements(res.data);
-    } catch (err) {
-      console.error("Gagal mengambil data:", err);
-    }
+    const data = await getAchivements();
+    setAchievements(data);
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Yakin ingin menghapus pencapaian ini?")) {
-      try {
-        await axios.delete(`http://localhost:5000/api/achievements/${id}`);
+      const deleted = await deleteAchivement(id);
+      if (deleted) {
         setAchievements(achievements.filter((a) => a.id !== id));
-      } catch (err) {
-        console.error("Gagal menghapus:", err);
       }
     }
   };
@@ -42,31 +41,28 @@ const Achievements = () => {
   };
 
   const handleSave = async () => {
-    try {
-      await axios.put(
-        `http://localhost:5000/api/achievements/${editId}`,
-        editData
-      );
+    const updated = await updateAchivement(
+      editId,
+      editData.title,
+      editData.photo
+    );
+    if (updated) {
       setAchievements(
         achievements.map((a) => (a.id === editId ? { ...a, ...editData } : a))
       );
       setEditId(null);
-    } catch (err) {
-      console.error("Gagal menyimpan perubahan:", err);
     }
   };
 
   const handleAdd = async () => {
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/achievements",
-        newAchievement
-      );
-      setAchievements([...achievements, res.data]);
+    const created = await createAchivement(
+      newAchievement.title,
+      newAchievement.photo
+    );
+    if (created && created.length > 0) {
+      setAchievements([created[0], ...achievements]);
       setNewAchievement({ title: "", photo: "" });
       setShowAddForm(false);
-    } catch (err) {
-      console.error("Gagal menambah prestasi:", err);
     }
   };
 
