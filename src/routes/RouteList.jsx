@@ -17,6 +17,7 @@ import Ekskul from "../pages/Ekskul";
 import Pengaduan from "../pages/Pengaduan";
 import Prestasi from "../pages/Prestasi";
 import ProfilGuru from "../pages/ProfilGuru";
+import GaleriFotoDetail from "../pages/GaleriFotoDetail";
 
 import HomeAdmin from "../pages/Admin/home";
 import Users from "../pages/Admin/Users";
@@ -71,6 +72,10 @@ const RouteList = createBrowserRouter([
             {
                 path: "galeriFoto",
                 element: <GaleriFoto />,
+            },
+            {
+                path: "galeriFoto/:id",
+                element: <GaleriFotoDetail />,
             },
             {
                 path: "galeriVideo",
@@ -135,7 +140,7 @@ const RouteList = createBrowserRouter([
                 element: <Photos />,
             },
             {
-                path: "photo-details",
+                path: "photoDetails",
                 element: <PhotoDetails />,
             },
         ],

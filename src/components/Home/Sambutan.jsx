@@ -2,8 +2,9 @@ const Sambutan = () => {
     return (
         <div className="flex flex-col items-center mt-20 gap-12 px-4">
             <div className="font-poppins font-bold text-3xl sm:text-4xl text-center">
-                <h1 className="max-w-md">
-                    Profil <span className="text-smporange">SMP Negeri 20 Semarang</span>
+                <h1 className="max-w-xl">
+                    Sambutan Kepala Sekolah{" "}
+                    <span className="text-smporange">SMP Negeri 20 Semarang</span>
                 </h1>
             </div>
 
