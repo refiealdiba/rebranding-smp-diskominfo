@@ -1,107 +1,115 @@
-import { useState } from 'react'
-import { supabase } from '../../config/db'
+import { useState } from "react";
+import { supabase } from "../../config/db";
 
 const FormAddArticle = () => {
-    const [image, setImage] = useState(null)
-    const [uploading, setUploading] = useState(false)
-    const [imageUrl, setImageUrl] = useState('')
-    const [title, setTitle] = useState('')
-    const [content, setContent] = useState('')
+    const [image, setImage] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const [imageUrl, setImageUrl] = useState("");
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
 
     const handleUpload = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         try {
-            setUploading(true)
+            setUploading(true);
 
             if (!image) {
-                throw new Error('Pilih gambar terlebih dahulu!')
+                throw new Error("Pilih gambar terlebih dahulu!");
             }
 
-            // Generate nama file unik
-            const fileExt = image.name.split('.').pop()
-            const fileName = `${ Math.random() }.${ fileExt }`
-            const filePath = `${ fileName }`
+            const fileExt = image.name.split(".").pop();
+            const fileName = `${Math.random()}.${fileExt}`;
+            const filePath = `${fileName}`;
 
-            // Upload gambar ke Supabase storage
             let { error: uploadError } = await supabase.storage
-                .from('thumbnail-article') // nama bucket Anda
-                .upload(filePath, image)
-
+                .from("thumbnail-article")
+                .upload(filePath, image);
 
             if (uploadError) {
-                throw uploadError
+                throw uploadError;
             }
 
-            // Dapatkan URL publik
-            const { data: { publicUrl } } = supabase
-                .storage
-                .from('thumbnail-article')
-                .getPublicUrl(filePath)
+            const {
+                data: { publicUrl },
+            } = supabase.storage.from("thumbnail-article").getPublicUrl(filePath);
 
-            setImageUrl(publicUrl)
+            setImageUrl(publicUrl);
 
-            // Simpan data artikel ke database
-            const { error } = await supabase
-                .from('articles')
-                .insert([
-                    {
-                        title: title,
-                        content: content,
-                        thumbnail: publicUrl,
-                    },
-                ])
+            const { error } = await supabase.from("articles").insert([
+                {
+                    title: title,
+                    content: content,
+                    thumbnail: publicUrl,
+                },
+            ]);
 
-            alert('Upload berhasil!')
+            if (error) throw error;
+
+            alert("Upload berhasil!");
+            setTitle("");
+            setContent("");
+            setImage(null);
         } catch (error) {
-            alert(error.message)
+            alert(error.message);
         } finally {
-            setUploading(false)
+            setUploading(false);
         }
-    }
+    };
+
     return (
-        <div>
-            <form onSubmit={handleUpload} className='flex flex-col items-center gap-4 p-4 shadow-lg rounded-lg mb-10'>
-                <h2 className='text-2xl font-bold mb-4'>Tambah Artikel</h2>
-                <input
-                    type="text"
-                    placeholder="Judul Artikel"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className='border px-3 py-2 rounded w-full mb-4'
-                />
-                <textarea
-                    placeholder="Konten Artikel"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    className='border px-3 py-2 rounded w-full mb-4'
-                    rows="4"
-                />
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setImage(e.target.files[0])}
-                    disabled={uploading}
-                    className='border px-3 py-2 rounded w-full mb-4'
-                />
-                <button type="submit" disabled={uploading} className='bg-smporange hover:bg-orange-600 text-white px-4 py-2 rounded'>
-                    {uploading ? 'Mengupload...' : 'Upload'}
-                </button>
-            </form>
-
-            {imageUrl && (
-                <div>
-                    <h3>Gambar yang diupload:</h3>
-                    <img
-                        src={imageUrl}
-                        alt="Uploaded"
-                        style={{ maxWidth: '300px', maxHeight: '300px' }}
+        <div className="px-4 py-10 font-inter">
+            <div className="bg-white rounded-xl shadow-2xl p-6 max-w-3xl mx-auto">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-smporange mb-6">
+                    Tambah Artikel
+                </h2>
+                <form onSubmit={handleUpload} className="flex flex-col gap-5">
+                    <input
+                        type="text"
+                        placeholder="Judul Artikel"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="border rounded px-4 py-2 w-full"
                     />
-                    <p>URL Gambar: {imageUrl}</p>
-                </div>
-            )}
-        </div>
-    )
-}
+                    <textarea
+                        placeholder="Konten Artikel"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        className="border rounded px-4 py-2 w-full"
+                        rows="6"
+                    />
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setImage(e.target.files[0])}
+                        disabled={uploading}
+                        className="border rounded px-4 py-2 w-full"
+                    />
+                    <button
+                        type="submit"
+                        disabled={uploading}
+                        className="w-max bg-smporange hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded"
+                    >
+                        {uploading ? "Mengupload..." : "Upload"}
+                    </button>
+                </form>
 
-export default FormAddArticle
+                {imageUrl && (
+                    <div className="mt-6">
+                        <h3 className="font-semibold text-gray-700 mb-2">Gambar yang diupload:</h3>
+                        <img
+                            src={imageUrl}
+                            alt="Uploaded"
+                            className="w-60 h-auto object-cover rounded shadow"
+                        />
+                        <p className="mt-2 text-sm text-gray-600 break-all">
+                            URL Gambar: {imageUrl}
+                        </p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default FormAddArticle;

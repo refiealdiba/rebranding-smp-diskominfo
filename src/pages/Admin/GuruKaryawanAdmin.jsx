@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Plus, Pencil, Trash } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getEmployees } from "../../services/employee";
 
 const dummyData = Array.from({ length: 23 }, (_, i) => ({
     id: i + 1,
@@ -12,12 +13,26 @@ const dummyData = Array.from({ length: 23 }, (_, i) => ({
 const ITEMS_PER_PAGE = 10;
 
 const GuruKaryawanAdmin = () => {
+    const [employees, setEmployees] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const paginatedData = dummyData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    const paginatedEmployees = employees.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(employees.length / ITEMS_PER_PAGE);
 
-    const totalPages = Math.ceil(dummyData.length / ITEMS_PER_PAGE);
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            try {
+                const data = await getEmployees();
+                setEmployees(data);
+                console.log(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchEmployees();
+    }, []);
 
     return (
         <div className="flex flex-col gap-12 px-4 py-10 font-inter">
@@ -27,7 +42,7 @@ const GuruKaryawanAdmin = () => {
 
             <div className="flex flex-col gap-5">
                 <Link
-                    to={""}
+                    to={"/admin/guruKaryawan/add"}
                     className="flex w-max items-center gap-2 bg-smporange text-white px-3 py-2 rounded-md"
                 >
                     <Plus size={16} />
@@ -47,20 +62,20 @@ const GuruKaryawanAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {paginatedData.map((item, index) => (
+                            {paginatedEmployees.map((item, index) => (
                                 <tr key={item.id} className="hover:bg-gray-50">
                                     <td className="px-4 py-2 border text-center">
                                         {startIndex + index + 1}
                                     </td>
                                     <td className="px-4 py-2 border">
                                         <img
-                                            src={item.foto}
-                                            alt={item.nama}
+                                            src={item.photo}
+                                            alt={item.name}
                                             className="w-12 h-12 object-cover rounded-full"
                                         />
                                     </td>
-                                    <td className="px-4 py-2 border">{item.nama}</td>
-                                    <td className="px-4 py-2 border">{item.jabatan}</td>
+                                    <td className="px-4 py-2 border">{item.name}</td>
+                                    <td className="px-4 py-2 border">{item.position}</td>
                                     <td className="px-4 py-2 border flex gap-2">
                                         <button className="bg-yellow-400 text-white px-2 py-1 rounded">
                                             <Pencil size={14} />
