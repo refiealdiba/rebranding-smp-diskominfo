@@ -56,7 +56,7 @@ const Navbar = () => {
                         <a
                             href="https://sites.google.com/view/labipasmpn20semarang"
                             target="_blank"
-                            className="hover:text-smporange"
+                            className=""
                         >
                             Lab. IPA
                         </a>
@@ -66,7 +66,7 @@ const Navbar = () => {
                         <a
                             href="https://pustaka20.smpn20.semarangkota.go.id/"
                             target="_blank"
-                            className="hover:text-smporange"
+                            className=""
                         >
                             Perpustakaan
                         </a>
@@ -126,7 +126,7 @@ const Navbar = () => {
                     <a
                         href="https://sites.google.com/view/labipasmpn20semarang"
                         target="_blank"
-                        className="hover:text-smporange"
+                        className=""
                     >
                         Lab. IPA
                     </a>
@@ -136,7 +136,7 @@ const Navbar = () => {
                     <a
                         href="https://pustaka20.smpn20.semarangkota.go.id/"
                         target="_blank"
-                        className="hover:text-smporange"
+                        className=""
                     >
                         Perpustakaan
                     </a>

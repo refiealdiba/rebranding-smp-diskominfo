@@ -2,9 +2,9 @@ import { Clock, Headset, MapPin } from "lucide-react";
 
 const KontakList = () => {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 items-start font-poppins">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start font-poppins px-4">
             {/* Jam Kerja */}
-            <div className="flex flex-col items-center gap-6 bg-smpsemigray rounded-lg shadow-xl pb-5">
+            <div className="flex flex-col items-center gap-6 bg-smpsemigray rounded-lg shadow-xl pb-5 w-full max-w-sm mx-auto">
                 <div className="flex items-center gap-2 bg-smporange text-white px-4 py-2 rounded-lg w-full justify-center">
                     <Clock />
                     <h2 className="font-semibold text-lg">Jam Kerja</h2>
@@ -20,7 +20,7 @@ const KontakList = () => {
             </div>
 
             {/* Customer Service */}
-            <div className="flex flex-col items-center gap-6 bg-smpsemigray rounded-lg shadow-xl pb-5">
+            <div className="flex flex-col items-center gap-6 bg-smpsemigray rounded-lg shadow-xl pb-5 w-full max-w-sm mx-auto">
                 <div className="flex items-center gap-2 bg-smporange text-white px-4 py-2 rounded-lg w-full justify-center">
                     <Headset />
                     <h2 className="font-semibold text-lg">Customer Service</h2>
@@ -36,7 +36,7 @@ const KontakList = () => {
             </div>
 
             {/* Alamat */}
-            <div className="flex flex-col items-center gap-6 bg-smpsemigray rounded-lg shadow-xl pb-5">
+            <div className="flex flex-col items-center gap-6 bg-smpsemigray rounded-lg shadow-xl pb-5 w-full max-w-sm mx-auto">
                 <div className="flex items-center gap-2 bg-smporange text-white px-4 py-2 rounded-lg w-full justify-center">
                     <MapPin />
                     <h2 className="font-semibold text-lg">Alamat</h2>
@@ -50,7 +50,7 @@ const KontakList = () => {
                         title="Lokasi SMPN 20 Semarang"
                         src="https://www.google.com/maps?q=-6.962396,110.468485&hl=id&z=16&output=embed"
                         width="100%"
-                        height="250"
+                        height="200"
                         style={{ border: 0 }}
                         allowFullScreen
                         loading="lazy"
