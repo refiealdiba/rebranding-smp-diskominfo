@@ -23,10 +23,10 @@ export const getComplaintById = async (id) => {
     }
     return data;
 };
-export const createComplaint = async (title, description) => {
+export const createComplaint = async (name, email, complaint) => {
     const { data, error } = await supabase
         .from("complaints")
-        .insert([{ title, description }]);
+        .insert([{ name, email, complaint }]);
     if (error) {
         console.error("Error creating complaint:", error);
         return null;
