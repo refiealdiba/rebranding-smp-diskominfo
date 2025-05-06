@@ -47,7 +47,7 @@ const GaleriFoto = () => {
                                 to={`/galeriFoto/${data.id}`}
                                 className="mt-4 text-sm text-smporange font-semibold"
                             >
-                                Lihat Semua
+                                Lihat Detail
                             </Link>
                         </div>
                     </div>

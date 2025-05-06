@@ -88,7 +88,7 @@ const Navbar = () => {
                                 alt="User Avatar"
                                 className="w-8 h-8 rounded-full"
                             />
-                            <span>{user.user_metadata.full_name}</span>
+                            {/* <span>{user.user_metadata.full_name}</span> */}
                             <button
                                 onClick={handleSignOut}
                                 className="bg-red-500 text-white px-4 py-1 rounded-full"
@@ -154,7 +154,7 @@ const Navbar = () => {
                                 alt="User Avatar"
                                 className="w-8 h-8 rounded-full"
                             />
-                            <span>{user.user_metadata.full_name}</span>
+                            {/* <span>{user.user_metadata.full_name}</span> */}
                             <button
                                 onClick={handleSignOut}
                                 className="bg-red-500 text-white px-4 py-1 rounded-full"
