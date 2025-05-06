@@ -15,7 +15,7 @@ export const getPhotos = async () => {
 export const getPhotoLatest = async (limit) => {
     const { data, error } = await supabase
         .from("photos")
-        .select("*")
+        .select("*, photo_details(*)")
         .order("created_at", { ascending: false })
         .limit(limit);
     if (error) {
