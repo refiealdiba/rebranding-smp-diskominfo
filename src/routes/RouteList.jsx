@@ -37,6 +37,7 @@ import FormEditVideo from "../components/Admin/FormEditVideo";
 import FormAddAchievement from "../components/Admin/FormAddAchievement";
 import FormEditAchievement from "../components/Admin/FormEditAchievement";
 import AdminPengaduan from "../pages/Admin/AdminPengaduan";
+import FormAddPhoto from "../components/Admin/FormAddPhoto";
 
 const RouteList = createBrowserRouter([
     {
@@ -163,7 +164,7 @@ const RouteList = createBrowserRouter([
             },
             {
                 path: "galeriFoto/add",
-                element: <Photos />,
+                element: <FormAddPhoto />,
             },
             {
                 path: "galeriVideo",

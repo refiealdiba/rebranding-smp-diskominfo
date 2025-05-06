@@ -10,6 +10,7 @@ const GaleriFoto = () => {
             try {
                 const data = await getPhotos();
                 setPhotos(data);
+                console.log(data);
             } catch (error) {
                 console.error(error);
             }

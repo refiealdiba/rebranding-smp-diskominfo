@@ -22,21 +22,23 @@ const GaleriVideo = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
                 {dataVideo.map((data, index) => (
-                    <div
+                    <a
+                        href={data.link_embed}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         key={index}
                         className="bg-white rounded-lg shadow-lg overflow-hidden w-[300px] mx-auto flex flex-col"
                     >
-                        <a href={data.link_embed} target="_blank" rel="noopener noreferrer">
-                            <img
-                                src={getYouTubeThumbnail(data.link_embed)}
-                                alt={data.title}
-                                className="w-full h-[170px] object-cover"
-                            />
-                        </a>
+                        <img
+                            src={getYouTubeThumbnail(data.link_embed)}
+                            alt={data.title}
+                            className="w-full h-[170px] object-cover"
+                        />
+
                         <div className="p-3">
                             <p className="text-xs font-semibold text-black">{data.title}</p>
                         </div>
-                    </div>
+                    </a>
                 ))}
             </div>
         </div>

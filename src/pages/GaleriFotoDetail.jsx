@@ -28,19 +28,18 @@ const GaleriFotoDetail = () => {
             </h1>
             <div className="flex flex-col items-center bg-white drop-shadow-2xl max-w-5xl px-5 py-7 gap-7 font-inter font-semibold text-lg">
                 <h2>{dataFoto.title}</h2>
-                {/* <div className="grid grid-cols-2 gap-10 px-5 py-7">
-                    {dataFoto.images.map((img, index) => (
+                <div className="grid grid-cols-2 gap-10 px-5 py-7">
+                    {dataFoto.photo_details.map((img, index) => (
                         <div key={index} className="w-full">
-                            <img src={img} alt={`Image ${index + 1}`} />
+                            <img src={img.photo} alt={`Image ${index + 1}`} />
                         </div>
                     ))}
-
-                </div> */}
-                <div className="flex justify-center">
+                </div>
+                {/* <div className="flex justify-center">
                     <div className="w-full">
                         <img src={dataFoto.thumbnail} alt={dataFoto.title} />
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

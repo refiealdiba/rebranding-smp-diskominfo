@@ -12,6 +12,21 @@ export const getAchivements = async () => {
     return data;
 };
 
+export const getLastAchievementId = async () => {
+    const { data, error } = await supabase
+        .from("achievements")
+        .select("id")
+        .order("id", { ascending: false })
+        .limit(1);
+
+    if (error) {
+        console.error("Error fetching last achievement ID:", error);
+        return null;
+    }
+
+    return data.length > 0 ? data[0].id : null;
+};
+
 export const getAchivementById = async (id) => {
     const { data, error } = await supabase.from("achievements").select("*").eq("id", id).single();
     if (error) {

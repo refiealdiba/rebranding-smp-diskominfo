@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../../config/db";
 import { ImagePlus, UploadCloud } from "lucide-react";
+import Swal from "sweetalert2";
 
 const FormEditEmployee = () => {
-    const { id } = useParams(); // Ambil ID dari URL
+    const { id } = useParams();
     const navigate = useNavigate();
     const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false);
@@ -12,7 +13,6 @@ const FormEditEmployee = () => {
     const [name, setName] = useState("");
     const [position, setPosition] = useState("");
 
-    // Ambil data jika sedang dalam mode edit
     useEffect(() => {
         if (id) {
             const fetchEmployee = async () => {
@@ -23,7 +23,7 @@ const FormEditEmployee = () => {
                     .single();
 
                 if (error) {
-                    alert("Gagal mengambil data!");
+                    Swal.fire("Error", "Gagal mengambil data!", "error");
                     return;
                 }
 
@@ -38,12 +38,25 @@ const FormEditEmployee = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const confirmed = await Swal.fire({
+            title: id ? "Konfirmasi Update" : "Konfirmasi Upload",
+            text: id
+                ? "Apakah Anda yakin ingin mengupdate data ini?"
+                : "Apakah Anda yakin ingin mengupload data ini?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Ya, Lanjutkan",
+            cancelButtonText: "Batal",
+        });
+
+        if (!confirmed.isConfirmed) return;
+
         setUploading(true);
 
         try {
             let photoUrl = imageUrl;
 
-            // Jika ada gambar baru diunggah
             if (image) {
                 const fileExt = image.name.split(".").pop();
                 const fileName = `${Date.now()}.${fileExt}`;
@@ -63,7 +76,6 @@ const FormEditEmployee = () => {
             }
 
             if (id) {
-                // Update data
                 const { error } = await supabase
                     .from("employees")
                     .update({ name, position, photo: photoUrl })
@@ -71,9 +83,12 @@ const FormEditEmployee = () => {
 
                 if (error) throw error;
 
-                alert("Data berhasil diupdate!");
+                await Swal.fire({
+                    icon: "success",
+                    title: "Berhasil",
+                    text: "Data berhasil diupdate!",
+                });
             } else {
-                // Tambah data baru
                 const { data: last, error: errLast } = await supabase
                     .from("employees")
                     .select("id")
@@ -94,16 +109,29 @@ const FormEditEmployee = () => {
 
                 if (error) throw error;
 
-                alert("Upload berhasil!");
+                await Swal.fire({
+                    icon: "success",
+                    title: "Berhasil",
+                    text: "Data berhasil diupload!",
+                });
             }
 
             navigate("/admin/guruKaryawan");
         } catch (error) {
-            alert(error.message);
+            Swal.fire("Gagal", error.message, "error");
         } finally {
             setUploading(false);
         }
     };
+
+    useEffect(() => {
+        if (image) {
+            const previewUrl = URL.createObjectURL(image);
+            setImageUrl(previewUrl);
+
+            return () => URL.revokeObjectURL(previewUrl);
+        }
+    }, [image]);
 
     return (
         <div className="px-4 py-10 font-inter bg-gray-50 min-h-screen">

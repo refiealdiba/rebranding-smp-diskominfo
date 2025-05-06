@@ -65,6 +65,17 @@ const SidebarContent = ({ toggleSidebar, isActive, isGaleriOpen, toggleGaleri })
 
         <div className="flex flex-col gap-2 text-white">
             <Link
+                to="/"
+                className={`px-5 py-3 rounded-md ${
+                    isActive("/")
+                        ? "bg-white text-smporange font-bold text-lg"
+                        : "hover:bg-smporange/70"
+                }`}
+                onClick={toggleSidebar}
+            >
+                Beranda
+            </Link>
+            <Link
                 to="/admin"
                 className={`px-5 py-3 rounded-md ${
                     isActive("/admin")

@@ -25,6 +25,22 @@ export const getArticleLatest = async (limit) => {
     return data;
 };
 
+export const getLatestArticleId = async () => {
+    const { data, error } = await supabase
+        .from("articles")
+        .select("id")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+    if (error) {
+        console.error("Error fetching latest article ID:", error);
+        return null;
+    }
+
+    return data.id;
+};
+
 export const getArticleById = async (id) => {
     const { data, error } = await supabase.from("articles").select("*").eq("id", id).single();
     if (error) {

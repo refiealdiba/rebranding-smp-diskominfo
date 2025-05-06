@@ -1,14 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../config/db";
 import { ImagePlus, UploadCloud } from "lucide-react";
 import { getLastIdEmployee } from "../../services/employee";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const FormAddEmployee = () => {
+    const navigate = useNavigate();
     const [image, setImage] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null); // New state
     const [uploading, setUploading] = useState(false);
     const [imageUrl, setImageUrl] = useState("");
     const [name, setName] = useState("");
     const [position, setPosition] = useState("");
+
+    useEffect(() => {
+        if (image) {
+            const localUrl = URL.createObjectURL(image);
+            setPreviewUrl(localUrl);
+
+            return () => URL.revokeObjectURL(localUrl); // Cleanup
+        }
+    }, [image]);
 
     const handleUpload = async (e) => {
         e.preventDefault();
@@ -44,14 +57,26 @@ const FormAddEmployee = () => {
 
             if (error) throw error;
 
-            alert("Upload berhasil!");
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Data karyawan berhasil diupload.",
+            });
+
+            // Reset form
             setName("");
             setPosition("");
             setImage(null);
+            setPreviewUrl(null);
         } catch (error) {
-            alert(error.message);
+            Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: error.message,
+            });
         } finally {
             setUploading(false);
+            navigate("/admin/guruKaryawan");
         }
     };
 
@@ -84,7 +109,6 @@ const FormAddEmployee = () => {
                             value={position}
                             onChange={(e) => setPosition(e.target.value)}
                             placeholder="Masukkan posisi/jabatan"
-                            rows={3}
                             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-smporange"
                         />
                     </div>
@@ -111,6 +135,17 @@ const FormAddEmployee = () => {
                         </div>
                     </div>
 
+                    {previewUrl && (
+                        <div className="mt-4">
+                            <h3 className="font-semibold text-gray-700 mb-2">Pratinjau Gambar:</h3>
+                            <img
+                                src={previewUrl}
+                                alt="Preview"
+                                className="w-60 h-auto object-cover rounded-lg shadow"
+                            />
+                        </div>
+                    )}
+
                     <button
                         type="submit"
                         disabled={uploading}
@@ -123,7 +158,7 @@ const FormAddEmployee = () => {
 
                 {imageUrl && (
                     <div className="mt-6 border-t pt-4">
-                        <h3 className="font-semibold text-gray-700 mb-2">Pratinjau Foto:</h3>
+                        <h3 className="font-semibold text-gray-700 mb-2">Foto Terupload:</h3>
                         <img
                             src={imageUrl}
                             alt="Uploaded"
