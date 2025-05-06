@@ -31,6 +31,7 @@ import GuruKaryawanAdmin from "../pages/Admin/GuruKaryawanAdmin";
 import FormAddArticle from "../components/Admin/FormAddArticle";
 import FormEditArticle from "../components/Admin/FormEditArticle";
 import FormAddKaryawan from "../components/Admin/FormAddKaryawan";
+import FormEditKaryawan from "../components/Admin/FormEditKaryawan";
 import FormAddVideo from "../components/Admin/FormAddVideo";
 import FormEditVideo from "../components/Admin/FormEditVideo";
 import FormAddAchievement from "../components/Admin/FormAddAchievement";
@@ -38,158 +39,166 @@ import FormEditAchievement from "../components/Admin/FormEditAchievement";
 import AdminPengaduan from "../pages/Admin/AdminPengaduan";
 
 const RouteList = createBrowserRouter([
-  {
-    path: "/",
-    element: <MainLayout />,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "profilSekolah",
-        element: <ProfilSmp />,
-      },
-      {
-        path: "visiMisi",
-        element: <VisiMisi />,
-      },
-      {
-        path: "profilGuruKaryawan",
-        element: <ProfilGuru />,
-      },
-      {
-        path: "sarana",
-        element: <Sarana />,
-      },
-      {
-        path: "struktur",
-        element: <Struktur />,
-      },
-      {
-        path: "prestasi",
-        element: <Prestasi />,
-      },
-      {
-        path: "berita",
-        element: <Berita />,
-      },
-      {
-        path: "berita/:id",
-        element: <BeritaDetail />,
-      },
-      {
-        path: "galeriFoto",
-        element: <GaleriFoto />,
-      },
-      {
-        path: "galeriFoto/:id",
-        element: <GaleriFotoDetail />,
-      },
-      {
-        path: "galeriVideo",
-        element: <GaleriVideo />,
-      },
-      {
-        path: "galeriVideo/add",
-        element: <FormAddVideo />,
-      },
-      {
-        path: "galeriPrestasi",
-        element: <GaleriPrestasi />,
-      },
-      {
-        path: "ekstrakulikuler",
-        element: <Ekskul />,
-      },
-      {
-        path: "kontak",
-        element: <Kontak />,
-      },
-      {
-        path: "pengaduan",
-        element: <Pengaduan />,
-      },
-      {
-        path: "test",
-        element: <Test />,
-      },
-      {
-        path: "*", // 404 fallback untuk route dalam MainLayout
+    {
+        path: "/",
+        element: <MainLayout />,
+        children: [
+            {
+                index: true,
+                element: <Home />,
+            },
+            {
+                path: "profilSekolah",
+                element: <ProfilSmp />,
+            },
+            {
+                path: "visiMisi",
+                element: <VisiMisi />,
+            },
+            {
+                path: "profilGuruKaryawan",
+                element: <ProfilGuru />,
+            },
+            {
+                path: "sarana",
+                element: <Sarana />,
+            },
+            {
+                path: "struktur",
+                element: <Struktur />,
+            },
+            {
+                path: "prestasi",
+                element: <Prestasi />,
+            },
+            {
+                path: "berita",
+                element: <Berita />,
+            },
+            {
+                path: "berita/:id",
+                element: <BeritaDetail />,
+            },
+            {
+                path: "galeriFoto",
+                element: <GaleriFoto />,
+            },
+            {
+                path: "galeriFoto/:id",
+                element: <GaleriFotoDetail />,
+            },
+            {
+                path: "galeriVideo",
+                element: <GaleriVideo />,
+            },
+            {
+                path: "galeriVideo/add",
+                element: <FormAddVideo />,
+            },
+            {
+                path: "galeriPrestasi",
+                element: <GaleriPrestasi />,
+            },
+            {
+                path: "ekstrakulikuler",
+                element: <Ekskul />,
+            },
+            {
+                path: "kontak",
+                element: <Kontak />,
+            },
+            {
+                path: "pengaduan",
+                element: <Pengaduan />,
+            },
+            {
+                path: "test",
+                element: <Test />,
+            },
+            {
+                path: "*", // 404 fallback untuk route dalam MainLayout
+                element: <NotFound />,
+            },
+        ],
+    },
+    {
+        path: "/admin",
+        element: <AdminDashboard />,
+        children: [
+            {
+                index: true,
+                element: <HomeAdmin />,
+            },
+            {
+                path: "guruKaryawan",
+                element: <GuruKaryawanAdmin />,
+            },
+            {
+                path: "guruKaryawan/add",
+                element: <FormAddKaryawan />,
+            },
+            {
+                path: "guruKaryawan/:id",
+                element: <FormEditKaryawan />,
+            },
+            {
+                path: "berita",
+                element: <Articles />,
+            },
+            {
+                path: "berita/add",
+                element: <FormAddArticle />,
+            },
+            {
+                path: "berita/edit/:id",
+                element: <FormEditArticle />,
+            },
+            {
+                path: "galeriFoto",
+                element: <Photos />,
+            },
+            {
+                path: "galeriFoto/:id",
+                element: <PhotoDetails />,
+            },
+            {
+                path: "galeriFoto/add",
+                element: <Photos />,
+            },
+            {
+                path: "galeriVideo",
+                element: <Videos />,
+            },
+            {
+                path: "galeriVideo/add",
+                element: <FormAddVideo />,
+            },
+            {
+                path: "galeriVideo/edit/:id",
+                element: <FormEditVideo />,
+            },
+            {
+                path: "galeriPrestasi",
+                element: <Achievements />,
+            },
+            {
+                path: "galeriPrestasi/add",
+                element: <FormAddAchievement />,
+            },
+            {
+                path: "galeriPrestasi/edit/:id",
+                element: <FormEditAchievement />,
+            },
+            {
+                path: "pengaduan",
+                element: <AdminPengaduan />,
+            },
+        ],
+    },
+    {
+        path: "*", // Fallback 404 global jika struktur rute diubah
         element: <NotFound />,
-      },
-    ],
-  },
-  {
-    path: "/admin",
-    element: <AdminDashboard />,
-    children: [
-      {
-        index: true,
-        element: <HomeAdmin />,
-      },
-      {
-        path: "guruKaryawan",
-        element: <GuruKaryawanAdmin />,
-      },
-      {
-        path: "guruKaryawan/add",
-        element: <FormAddKaryawan />,
-      },
-      {
-        path: "berita",
-        element: <Articles />,
-      },
-      {
-        path: "berita/add",
-        element: <FormAddArticle />,
-      },
-      {
-        path: "berita/edit/:id",
-        element: <FormEditArticle />,
-      },
-      {
-        path: "galeriFoto",
-        element: <Photos />,
-      },
-      {
-        path: "galeriFoto/add",
-        element: <Photos />,
-      },
-      {
-        path: "galeriVideo",
-        element: <Videos />,
-      },
-      {
-        path: "galeriVideo/add",
-        element: <FormAddVideo />,
-      },
-      {
-        path: "galeriVideo/edit/:id",
-        element: <FormEditVideo />,
-      },
-      {
-        path: "galeriPrestasi",
-        element: <Achievements />,
-      },
-      {
-        path: "galeriPrestasi/add",
-        element: <FormAddAchievement />,
-      },
-      {
-        path: "galeriPrestasi/edit/:id",
-        element: <FormEditAchievement />,
-      },
-      {
-        path: "pengaduan",
-        element: <AdminPengaduan />,
-      },
-    ],
-  },
-  {
-    path: "*", // Fallback 404 global jika struktur rute diubah
-    element: <NotFound />,
-  },
+    },
 ]);
 
 export default RouteList;
