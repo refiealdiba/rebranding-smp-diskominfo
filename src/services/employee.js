@@ -25,19 +25,6 @@ export const getLastIdEmployee = async () => {
     return data[0]?.id || null;
 };
 
-export const getLastIdEmployee = async () => {
-    const { data, error } = await supabase
-        .from('employees')
-        .select('id')
-        .order('id', { ascending: false })
-        .limit(1);
-    if (error) {
-        console.error('Error fetching last employee ID:', error);
-        return null;
-    }
-    return data[0]?.id || null;
-}
-
 export const createEmployee = async (name, position) => {
     const { data, error } = await supabase.from("employees").insert([{ name, position }]);
     if (error) {
