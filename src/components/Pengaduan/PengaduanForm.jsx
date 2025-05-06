@@ -1,15 +1,40 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { createComplaint } from "../../services/complaints";
 
 const PengaduanForm = () => {
+    const [form, setForm] = useState({
+        nama: "",
+        email: "",
+        pesan: "",
+    });
+
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(null);
+    const [error, setError] = useState(null);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm((prev) => ({ ...prev, [name]: value }));
+    };
+
     const handleSubmitComplaint = async (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData);
-        const { error } = await createComplaint(data.nama, data.email, data.pengaduan);
-        if (error) {
-            console.error("Error creating complaint:", error);
+        setLoading(true);
+        setError(null);
+        setSuccess(null);
+
+        const { nama, email, pesan } = form;
+
+        if (!nama || !email || !pesan) {
+            setError("Semua field harus diisi.");
+            setLoading(false);
+            return;
         }
+
+        await createComplaint(nama, email, pesan);
+        setSuccess("Pengaduan berhasil dikirim.");
+        setForm({ nama: "", email: "", pesan: "" });
+        setLoading(false);
     };
 
     return (
@@ -26,6 +51,8 @@ const PengaduanForm = () => {
                         type="text"
                         name="nama"
                         id="nama"
+                        value={form.nama}
+                        onChange={handleChange}
                         className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-smporange font-normal"
                         placeholder="Masukkan nama Anda"
                     />
@@ -38,6 +65,8 @@ const PengaduanForm = () => {
                         type="email"
                         name="email"
                         id="email"
+                        value={form.email}
+                        onChange={handleChange}
                         className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-smporange font-normal"
                         placeholder="contoh@email.com"
                     />
@@ -50,16 +79,21 @@ const PengaduanForm = () => {
                         name="pesan"
                         id="pesan"
                         rows={6}
+                        value={form.pesan}
+                        onChange={handleChange}
                         className="border border-gray-300 rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-smporange font-normal"
                         placeholder="Tuliskan pesan pengaduan Anda..."
                     ></textarea>
                 </div>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {success && <p className="text-green-500 text-sm">{success}</p>}
                 <div className="flex justify-end">
                     <button
                         type="submit"
-                        className="bg-smporange text-white px-4 py-2 rounded-md hover:bg-smpdarkorange transition-colors text-sm"
+                        disabled={loading}
+                        className="bg-smporange text-white px-4 py-2 rounded-md hover:bg-smpdarkorange transition-colors text-sm disabled:opacity-50"
                     >
-                        Kirim
+                        {loading ? "Mengirim..." : "Kirim"}
                     </button>
                 </div>
             </form>

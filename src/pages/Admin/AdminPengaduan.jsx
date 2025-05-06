@@ -1,12 +1,18 @@
-import { useState } from "react";
-import { Pencil, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import { NotebookText } from "lucide-react";
+import { getComplaints } from "../../services/complaints";
+import { Link } from "react-router-dom";
 
 const AdminPengaduan = () => {
-    const [pengaduan, setPengaduan] = useState([
-        { id: 1, nama: "Ahmad", email: "ahmad@example.com", pesan: "Jalan rusak." },
-        { id: 2, nama: "Siti", email: "siti@example.com", pesan: "Lampu mati." },
-    ]);
+    const [pengaduan, setPengaduan] = useState([]);
 
+    useEffect(() => {
+        const fetchPengaduan = async () => {
+            const result = await getComplaints();
+            setPengaduan(result);
+        };
+        fetchPengaduan();
+    }, []);
     // const [form, setForm] = useState({ nama: "", email: "", pesan: "" });
     // const [isEditing, setIsEditing] = useState(false);
     // const [editId, setEditId] = useState(null);
@@ -65,17 +71,17 @@ const AdminPengaduan = () => {
                                 <th className="px-4 py-2 border">Nama</th>
                                 <th className="px-4 py-2 border">Email</th>
                                 <th className="px-4 py-2 border">Pesan</th>
-                                <th className="px-4 py-2 border text-center">Aksi</th>
+                                {/* <th className="px-4 py-2 border text-center">Aksi</th> */}
                             </tr>
                         </thead>
                         <tbody>
                             {pengaduan.map((item, index) => (
                                 <tr key={item.id} className="hover:bg-gray-50">
                                     <td className="px-4 py-2 border text-center">{index + 1}</td>
-                                    <td className="px-4 py-2 border">{item.nama}</td>
+                                    <td className="px-4 py-2 border">{item.name}</td>
                                     <td className="px-4 py-2 border">{item.email}</td>
-                                    <td className="px-4 py-2 border">{item.pesan}</td>
-                                    <td className="px-4 py-2 border text-center">
+                                    <td className="px-4 py-2 border">{item.complaint}</td>
+                                    {/* <td className="px-4 py-2 border text-center">
                                         <div className="flex justify-center gap-2">
                                             <button
                                                 onClick={() => handleEdit(item)}
@@ -89,8 +95,14 @@ const AdminPengaduan = () => {
                                             >
                                                 <Trash size={16} />
                                             </button>
+                                            <Link
+                                                to={`/admin/pengaduan/${item.id}`}
+                                                className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded"
+                                            >
+                                                <NotebookText size={16} />
+                                            </Link>
                                         </div>
-                                    </td>
+                                    </td> */}
                                 </tr>
                             ))}
                             {pengaduan.length === 0 && (

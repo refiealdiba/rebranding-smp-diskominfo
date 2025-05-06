@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { supabase } from "../../config/db";
-import { Mail, Lock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
@@ -22,71 +23,61 @@ export default function Register() {
             setErrorMsg(error.message);
         } else {
             setSuccessMsg("Registrasi berhasil! Silakan cek email untuk verifikasi.");
+            setTimeout(() => {
+                navigate("/login");
+            }, 2000);
         }
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-white px-4">
-            <div className="w-full max-w-md p-8 bg-white/80 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-2xl space-y-6">
-                <h1 className="text-3xl font-extrabold text-center text-blue-600">Buat Akun</h1>
-
+        <div className="flex flex-col justify-center items-center min-h-screen bg-smporange font-inter gap-7">
+            <div className="flex flex-col items-center gap-5">
+                <img src="logo.png" alt="logo" className="w-30" />
+                <h1 className="text-center font-bold text-white text-xl font-inter">
+                    Registrasi Admin <br />
+                    SMP Negeri 20 Semarang
+                </h1>
+            </div>
+            <div className="flex flex-col items-center gap-5 bg-white px-9 py-7 rounded-lg w-lg">
+                <h2 className="text-center font-bold text-xl">Buat Akun Baru</h2>
                 {errorMsg && (
-                    <div className="p-3 text-sm text-red-700 bg-red-100 rounded-md shadow">
-                        {errorMsg}
-                    </div>
+                    <div className="p-2 text-sm text-red-600 bg-red-100 rounded">{errorMsg}</div>
                 )}
                 {successMsg && (
-                    <div className="p-3 text-sm text-green-700 bg-green-100 rounded-md shadow">
+                    <div className="p-2 text-sm text-green-600 bg-green-100 rounded">
                         {successMsg}
                     </div>
                 )}
-
-                <form onSubmit={handleRegister} className="space-y-5">
-                    <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                            Email
-                        </label>
-                        <div className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 bg-white">
-                            <Mail className="text-gray-400 w-5 h-5" />
-                            <input
-                                type="email"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="you@example.com"
-                                className="w-full bg-transparent outline-none"
-                            />
-                        </div>
+                <form onSubmit={handleRegister} className="space-y-7 w-full">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-regular">Email</label>
+                        <input
+                            type="email"
+                            placeholder="Masukkan Email Anda"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="text-sm font-normal w-full px-4 py-2 border border-smpgray/50 rounded-sm focus:ring-2 focus:ring-blue-400"
+                        />
                     </div>
-
-                    <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                            Password
-                        </label>
-                        <div className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 bg-white">
-                            <Lock className="text-gray-400 w-5 h-5" />
-                            <input
-                                type="password"
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="••••••••"
-                                className="w-full bg-transparent outline-none"
-                            />
-                        </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-medium text-gray-700">Password</label>
+                        <input
+                            type="password"
+                            placeholder="Masukkan Password Anda"
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="text-sm font-medium w-full px-4 py-2 border border-smpgray/50 rounded-sm focus:ring-2 focus:ring-blue-400"
+                        />
                     </div>
-
                     <button
                         type="submit"
-                        className="w-full py-2 px-4 text-white font-semibold bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition duration-200"
+                        className="w-full text-base text-white bg-smporange hover:bg-smpdarkorange rounded-lg px-4 py-2 transition-all duration-300 ease-in-out font-semibold"
                     >
-                        Daftar Sekarang
+                        Daftar
                     </button>
                 </form>
-
-                <p className="text-xs text-center text-gray-500">
-                    Dengan mendaftar, Anda menyetujui kebijakan privasi kami.
-                </p>
             </div>
         </div>
     );

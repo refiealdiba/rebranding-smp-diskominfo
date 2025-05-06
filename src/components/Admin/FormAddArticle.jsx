@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../config/db";
 import { ImagePlus, UploadCloud } from "lucide-react";
 import { getLatestArticleId } from "../../services/articles";
@@ -12,6 +12,7 @@ const FormAddArticle = () => {
     const [imageUrl, setImageUrl] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [latestId, setLatestId] = useState();
 
     const handleUpload = async (e) => {
         e.preventDefault();
@@ -36,7 +37,7 @@ const FormAddArticle = () => {
 
             const { error } = await supabase.from("articles").insert([
                 {
-                    id: (await getLatestArticleId()) + 1,
+                    id: latestId + 1,
                     title,
                     content,
                     thumbnail: publicUrl,
@@ -69,6 +70,16 @@ const FormAddArticle = () => {
             setUploading(false);
         }
     };
+
+    useEffect(() => {
+        const fetchLastArticleId = async () => {
+            const id = await getLatestArticleId();
+            setLatestId(id);
+            console.log(id);
+        };
+
+        fetchLastArticleId();
+    }, []);
 
     return (
         <div className="px-4 py-10 font-inter bg-gray-50 min-h-screen">

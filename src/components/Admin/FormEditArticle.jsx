@@ -76,11 +76,10 @@ const FormEditArticle = () => {
                 if (uploadError) throw uploadError;
 
                 const { data } = supabase.storage.from("thumbnail-article").getPublicUrl(filePath);
-
                 newImageUrl = data.publicUrl;
             }
 
-            await supabase
+            const { error: updateError } = await supabase
                 .from("articles")
                 .update({
                     title,
@@ -89,7 +88,7 @@ const FormEditArticle = () => {
                 })
                 .eq("id", id);
 
-            if (error) throw error;
+            if (updateError) throw updateError;
 
             await Swal.fire({
                 icon: "success",

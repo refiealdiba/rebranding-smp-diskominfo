@@ -21,6 +21,8 @@ const FormAddEmployee = () => {
 
             return () => URL.revokeObjectURL(localUrl); // Cleanup
         }
+
+        console.log(getLastIdEmployee());
     }, [image]);
 
     const handleUpload = async (e) => {
@@ -76,7 +78,7 @@ const FormAddEmployee = () => {
             });
         } finally {
             setUploading(false);
-            navigate("/admin/guruKaryawan");
+            // navigate("/admin/guruKaryawan");
         }
     };
 

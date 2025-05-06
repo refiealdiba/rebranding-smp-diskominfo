@@ -29,7 +29,7 @@ export const getLatestArticleId = async () => {
     const { data, error } = await supabase
         .from("articles")
         .select("id")
-        .order("created_at", { ascending: false })
+        .order("id", { ascending: false })
         .limit(1)
         .single();
 
