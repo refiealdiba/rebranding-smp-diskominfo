@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Plus, Pencil, Trash } from "lucide-react";
+import { Plus, Pencil, Trash, NotebookText } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getPhotos, deletePhoto } from "../../services/photos";
 
@@ -70,7 +70,7 @@ const PhotosAdmin = () => {
                                     </td>
                                     <td className="px-4 py-2 border text-center">
                                         <img
-                                            src={photo.url}
+                                            src={photo.thumbnail}
                                             alt={photo.title}
                                             className="w-32 h-20 object-cover rounded-lg mx-auto"
                                         />
@@ -81,7 +81,13 @@ const PhotosAdmin = () => {
                                     <td className="px-4 py-2 border">
                                         <div className="flex items-center gap-2">
                                             <Link
-                                                to={`/admin/photos/edit/${photo.id}`}
+                                                to={`/admin/galeriFoto/detail/${photo.id}`}
+                                                className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded"
+                                            >
+                                                <NotebookText size={16} />
+                                            </Link>
+                                            <Link
+                                                to={`/admin/galeriFoto/${photo.id}`}
                                                 className="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded"
                                                 title="Edit"
                                             >

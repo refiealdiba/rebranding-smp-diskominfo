@@ -40,6 +40,8 @@ import AdminPengaduan from "../pages/Admin/AdminPengaduan";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import FormAddPhoto from "../components/Admin/FormAddPhoto";
+import FormEditPhoto from "../components/Admin/FormEditPhoto";
+import FormDetailPhoto from "../components/Admin/FormDetailPhoto";
 
 const RouteList = createBrowserRouter([
     {
@@ -170,11 +172,15 @@ const RouteList = createBrowserRouter([
             },
             {
                 path: "galeriFoto/:id",
-                element: <PhotoDetails />,
+                element: <FormEditPhoto />,
             },
             {
                 path: "galeriFoto/add",
                 element: <FormAddPhoto />,
+            },
+            {
+                path: "galeriFoto/detail/:id",
+                element: <FormDetailPhoto />,
             },
             {
                 path: "galeriVideo",

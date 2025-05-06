@@ -35,7 +35,7 @@ const FormAddPhoto = () => {
 
             setImageUrl(publicUrl);
 
-            const { error } = await supabase.from("photo-gallery").insert([
+            const { error } = await supabase.from("photos").insert([
                 {
                     title,
                     thumbnail: publicUrl,
