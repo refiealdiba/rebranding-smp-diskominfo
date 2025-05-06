@@ -1,201 +1,140 @@
 import { useEffect, useState } from "react";
-import { PlusCircle, XCircle } from "lucide-react";
-import {
-  getVideos,
-  createVideo,
-  updateVideo,
-  deleteVideo,
-} from "../../services/videos";
+import { Link } from "react-router-dom";
+import { Plus, Pencil, Trash } from "lucide-react";
+import { getVideos, deleteVideo } from "../../services/videos"; // pastikan path sesuai
+
+const ITEMS_PER_PAGE = 10;
 
 const Videos = () => {
   const [videos, setVideos] = useState([]);
-  const [editId, setEditId] = useState(null);
-  const [editData, setEditData] = useState({ title: "", url: "" });
-  const [newVideo, setNewVideo] = useState({ title: "", url: "" });
-  const [showForm, setShowForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const fetchVideos = async () => {
+    const data = await getVideos();
+    setVideos(Array.isArray(data) ? data : []);
+  };
 
   useEffect(() => {
-    loadVideos();
+    fetchVideos();
   }, []);
-
-  const loadVideos = async () => {
-    const data = await getVideos();
-    setVideos(data);
-  };
 
   const handleDelete = async (id) => {
     if (window.confirm("Yakin ingin menghapus video ini?")) {
       const res = await deleteVideo(id);
-      if (res) setVideos(videos.filter((v) => v.id !== id));
+      if (res) {
+        setVideos(videos.filter((v) => v.id !== id));
+      }
     }
   };
 
-  const handleEdit = (video) => {
-    setEditId(video.id);
-    setEditData({ title: video.title, url: video.url });
-  };
-
-  const handleSave = async () => {
-    const res = await updateVideo(editId, editData.title, editData.url);
-    if (res) {
-      setVideos(
-        videos.map((v) => (v.id === editId ? { ...v, ...editData } : v))
-      );
-      setEditId(null);
-    }
-  };
-
-  const handleAdd = async () => {
-    if (!newVideo.title.trim()) return alert("Judul video tidak boleh kosong.");
-    const res = await createVideo(newVideo.title, newVideo.url);
-    if (res) {
-      await loadVideos();
-      setNewVideo({ title: "", url: "" });
-      setShowForm(false);
-    }
-  };
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedVideos = videos.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const totalPages = Math.ceil((videos?.length || 0) / ITEMS_PER_PAGE);
 
   return (
-    <div className="p-6 bg-white shadow rounded-lg min-h-screen">
-      <h2 className="text-2xl font-bold text-smporange mb-6">Kelola Video</h2>
+    <div className="flex flex-col gap-10 px-4 py-10 font-inter">
+      <h1 className="text-xl font-bold text-smporange">Video</h1>
 
-      <button
-        onClick={() => setShowForm(!showForm)}
-        className={`mb-4 flex items-center gap-2 px-4 py-2 rounded font-medium text-white transition ${
-          showForm
-            ? "bg-red-500 hover:bg-red-600"
-            : "bg-smporange hover:bg-orange-600"
-        }`}
+      <Link
+        to={"/admin/galeriVideo/add"}
+        className="flex w-max items-center gap-2 bg-smporange text-white px-3 py-2 rounded-md"
       >
-        {showForm ? <XCircle size={20} /> : <PlusCircle size={20} />}
-        {showForm ? "Tutup Form" : "Tambah Video"}
-      </button>
+        <Plus size={16} />
+        <p className="text-sm">Tambah</p>
+      </Link>
 
-      {showForm && (
-        <div className="mb-6 bg-slate-50 p-4 rounded shadow">
-          <div className="grid md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Judul video"
-              value={newVideo.title}
-              onChange={(e) =>
-                setNewVideo({ ...newVideo, title: e.target.value })
-              }
-              className="border p-2 rounded w-full"
-            />
-            <input
-              type="text"
-              placeholder="URL video"
-              value={newVideo.url}
-              onChange={(e) =>
-                setNewVideo({ ...newVideo, url: e.target.value })
-              }
-              className="border p-2 rounded w-full"
-            />
-          </div>
-          <button
-            onClick={handleAdd}
-            className="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-          >
-            Simpan
-          </button>
-        </div>
-      )}
-
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-gray-100 shadow rounded-2xl overflow-hidden">
-          <thead className="bg-smporange text-white">
+      <div className="bg-white rounded-xl p-4 shadow-2xl overflow-x-auto">
+        <table className="min-w-full text-sm border border-gray-300">
+          <thead className="bg-gray-100">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold">
-                Judul
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold">URL</th>
-              <th className="px-6 py-3 text-center text-sm font-semibold">
-                Aksi
-              </th>
+              <th className="px-4 py-2 border">No.</th>
+              <th className="px-4 py-2 border">Judul</th>
+              <th className="px-4 py-2 border">Link Embed</th>
+              <th className="px-4 py-2 border text-center">Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {videos.map((v) => (
-              <tr
-                key={v.id}
-                className="border-b hover:bg-yellow-50 transition-all duration-200"
-              >
-                <td className="px-6 py-4">
-                  {editId === v.id ? (
-                    <input
-                      value={editData.title}
-                      onChange={(e) =>
-                        setEditData({ ...editData, title: e.target.value })
-                      }
-                      className="border px-3 py-1 w-full rounded-md"
-                    />
-                  ) : (
-                    <span className="font-medium">{v.title}</span>
-                  )}
-                </td>
-                <td className="px-6 py-4">
-                  {editId === v.id ? (
-                    <input
-                      value={editData.url}
-                      onChange={(e) =>
-                        setEditData({ ...editData, url: e.target.value })
-                      }
-                      className="border px-3 py-1 w-full rounded-md"
-                    />
-                  ) : (
+            {paginatedVideos.length > 0 ? (
+              paginatedVideos.map((video, index) => (
+                <tr key={video.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 border text-center">
+                    {startIndex + index + 1}
+                  </td>
+                  <td className="px-4 py-2 border font-medium">
+                    {video.title}
+                  </td>
+                  <td className="px-4 py-2 border">
                     <a
-                      href={v.url}
+                      href={video.link_embed}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 underline"
                     >
-                      {v.url}
+                      {video.link_embed}
                     </a>
-                  )}
-                </td>
-                <td className="px-6 py-4 text-center">
-                  {editId === v.id ? (
-                    <>
-                      <button
-                        onClick={handleSave}
-                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mr-2"
+                  </td>
+                  <td className="px-4 py-2 border text-center">
+                    <div className="flex justify-center gap-2">
+                      <Link
+                        to={`/admin/galeriVideo/edit/${video.id}`}
+                        className="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded"
+                        title="Edit"
                       >
-                        Simpan
-                      </button>
+                        <Pencil size={16} />
+                      </Link>
                       <button
-                        onClick={() => setEditId(null)}
-                        className="bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded"
+                        onClick={() => handleDelete(video.id)}
+                        className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
+                        title="Hapus"
                       >
-                        Batal
+                        <Trash size={16} />
                       </button>
-                    </>
-                  ) : (
-                    <button
-                      onClick={() => handleEdit(v)}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded mr-2"
-                    >
-                      Edit
-                    </button>
-                  )}
-                  <button
-                    onClick={() => handleDelete(v.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                  >
-                    Hapus
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {videos.length === 0 && (
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
               <tr>
-                <td colSpan="3" className="text-center py-4 text-gray-500">
+                <td colSpan="4" className="text-center py-4 text-gray-500">
                   Tidak ada video untuk ditampilkan.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+
+        {/* Pagination */}
+        <div className="flex justify-end mt-4 gap-2">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+          >
+            Prev
+          </button>
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded ${
+                currentPage === i + 1
+                  ? "bg-smporange text-white"
+                  : "bg-gray-100"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

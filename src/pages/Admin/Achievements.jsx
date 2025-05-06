@@ -1,205 +1,154 @@
-import { useEffect, useState } from "react";
-import { PlusCircle, XCircle } from "lucide-react";
-import {
-  getAchivements,
-  createAchivement,
-  updateAchivement,
-  deleteAchivement,
-} from "../../services/achievements";
+import { Link } from "react-router-dom";
+import { Plus, Pencil, Trash } from "lucide-react";
+import { useState, useEffect } from "react";
+import { getAchivements, deleteAchivement } from "../../services/achievements";
+
+const ITEMS_PER_PAGE = 10;
 
 const Achievements = () => {
   const [achievements, setAchievements] = useState([]);
-  const [editId, setEditId] = useState(null);
-  const [editData, setEditData] = useState({ title: "", photo: "" });
-  const [newAchievement, setNewAchievement] = useState({
-    title: "",
-    photo: "",
-  });
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedAchievements = achievements.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
+  const totalPages = Math.ceil(achievements.length / ITEMS_PER_PAGE);
+
+  const fetchAchievements = async () => {
+    try {
+      const data = await getAchivements();
+      setAchievements(data);
+    } catch (error) {
+      console.error("Gagal mengambil data prestasi:", error);
+    }
+  };
 
   useEffect(() => {
     fetchAchievements();
   }, []);
 
-  const fetchAchievements = async () => {
-    const data = await getAchivements();
-    setAchievements(data);
-  };
-
   const handleDelete = async (id) => {
-    if (window.confirm("Yakin ingin menghapus pencapaian ini?")) {
-      const deleted = await deleteAchivement(id);
-      if (deleted) {
-        setAchievements(achievements.filter((a) => a.id !== id));
+    if (window.confirm("Yakin ingin menghapus prestasi ini?")) {
+      try {
+        const success = await deleteAchivement(id);
+        if (success) {
+          setAchievements(achievements.filter((a) => a.id !== id));
+        }
+      } catch (error) {
+        console.error("Gagal menghapus prestasi:", error);
       }
     }
   };
 
-  const handleEdit = (a) => {
-    setEditId(a.id);
-    setEditData({ title: a.title, photo: a.photo });
-  };
-
-  const handleSave = async () => {
-    const updated = await updateAchivement(
-      editId,
-      editData.title,
-      editData.photo
-    );
-    if (updated) {
-      setAchievements(
-        achievements.map((a) => (a.id === editId ? { ...a, ...editData } : a))
-      );
-      setEditId(null);
-    }
-  };
-
-  const handleAdd = async () => {
-    const created = await createAchivement(
-      newAchievement.title,
-      newAchievement.photo
-    );
-    if (created && created.length > 0) {
-      setAchievements([created[0], ...achievements]);
-      setNewAchievement({ title: "", photo: "" });
-      setShowAddForm(false);
-    }
-  };
-
   return (
-    <div className="p-6 bg-white shadow rounded-lg min-h-screen">
-      <h2 className="text-2xl font-bold text-smporange mb-6">
-        Kelola Prestasi
-      </h2>
+    <div className="flex flex-col gap-12 px-4 py-10 font-inter">
+      <div className="font-bold self-start">
+        <h1 className="text-lg sm:text-xl md:text-2xl text-smporange">
+          Prestasi
+        </h1>
+      </div>
 
-      <button
-        onClick={() => setShowAddForm(!showAddForm)}
-        className={`mb-4 flex items-center gap-2 px-4 py-2 rounded font-medium text-white transition ${
-          showAddForm
-            ? "bg-red-500 hover:bg-red-600"
-            : "bg-smporange hover:bg-orange-600"
-        }`}
-      >
-        {showAddForm ? <XCircle size={20} /> : <PlusCircle size={20} />}
-        {showAddForm ? "Tutup Form" : "Tambah Prestasi"}
-      </button>
+      <div className="flex flex-col gap-5">
+        <Link
+          to={"/admin/galeriPrestasi/add"}
+          className="flex w-max items-center gap-2 bg-smporange text-white px-3 py-2 rounded-md"
+        >
+          <Plus size={16} />
+          <p className="text-sm">Tambah</p>
+        </Link>
 
-      {showAddForm && (
-        <div className="mb-6 p-4 border rounded-lg bg-gray-50">
-          <div className="grid md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Judul Prestasi"
-              value={newAchievement.title}
-              onChange={(e) =>
-                setNewAchievement({ ...newAchievement, title: e.target.value })
-              }
-              className="border px-3 py-2 rounded w-full"
-            />
-            <input
-              type="text"
-              placeholder="URL Foto"
-              value={newAchievement.photo}
-              onChange={(e) =>
-                setNewAchievement({ ...newAchievement, photo: e.target.value })
-              }
-              className="border px-3 py-2 rounded w-full"
-            />
-          </div>
-          <button
-            onClick={handleAdd}
-            className="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-          >
-            Simpan Prestasi
-          </button>
-        </div>
-      )}
-
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-gray-100 shadow rounded-2xl overflow-hidden">
-          <thead className="bg-smporange text-white">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold">
-                Judul
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold">
-                Foto
-              </th>
-              <th className="px-6 py-3 text-center text-sm font-semibold">
-                Aksi
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {achievements.map((a) => (
-              <tr
-                key={a.id}
-                className="border-b hover:bg-yellow-50 transition-all duration-200"
-              >
-                <td className="px-6 py-4">
-                  {editId === a.id ? (
-                    <input
-                      value={editData.title}
-                      onChange={(e) =>
-                        setEditData({ ...editData, title: e.target.value })
-                      }
-                      className="border px-3 py-1 w-full rounded-md"
-                    />
-                  ) : (
-                    <span className="font-medium">{a.title}</span>
-                  )}
-                </td>
-                <td className="px-6 py-4">
-                  {editId === a.id ? (
-                    <input
-                      value={editData.photo}
-                      onChange={(e) =>
-                        setEditData({ ...editData, photo: e.target.value })
-                      }
-                      className="border px-3 py-1 w-full rounded-md"
-                    />
-                  ) : (
+        <div className="bg-white rounded-xl p-4 shadow-2xl overflow-x-auto">
+          <h2 className="font-semibold text-md mb-4">Tabel Prestasi</h2>
+          <table className="min-w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+            <thead>
+              <tr className="bg-gray-100 text-left text-sm font-semibold text-gray-700">
+                <th className="px-4 py-3 border">No.</th>
+                <th className="px-4 py-3 border">Foto</th>
+                <th className="px-4 py-3 border">Judul</th>
+                <th className="px-4 py-3 border text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedAchievements.map((item, index) => (
+                <tr key={item.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 border text-center">
+                    {startIndex + index + 1}
+                  </td>
+                  <td className="px-4 py-2 border text-center">
                     <img
-                      src={a.photo}
-                      alt={a.title}
-                      className="w-14 h-14 object-cover rounded shadow"
+                      src={item.photo}
+                      alt={item.title}
+                      className="w-24 h-24 object-cover rounded-lg mx-auto"
                     />
-                  )}
-                </td>
-                <td className="px-6 py-4 text-center">
-                  {editId === a.id ? (
-                    <button
-                      onClick={handleSave}
-                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mr-2"
-                    >
-                      Simpan
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleEdit(a)}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded mr-2"
-                    >
-                      Edit
-                    </button>
-                  )}
-                  <button
-                    onClick={() => handleDelete(a.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                  >
-                    Hapus
-                  </button>
-                </td>
-              </tr>
+                  </td>
+                  <td className="px-4 py-2 border font-medium text-gray-800">
+                    {item.title}
+                  </td>
+                  <td className="px-4 py-2 border text-center">
+                    <div className="flex justify-center items-center gap-2">
+                      <Link
+                        to={`/admin/galeriPrestasi/edit/${item.id}`}
+                        className="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded"
+                        title="Edit"
+                      >
+                        <Pencil size={16} />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
+                        title="Hapus"
+                      >
+                        <Trash size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {paginatedAchievements.length === 0 && (
+                <tr>
+                  <td colSpan="4" className="text-center py-4 text-gray-500">
+                    Tidak ada data prestasi untuk ditampilkan.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+
+          {/* Pagination */}
+          <div className="flex justify-end mt-4 gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+            >
+              Prev
+            </button>
+            {[...Array(totalPages)].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-3 py-1 rounded ${
+                  currentPage === i + 1
+                    ? "bg-smporange text-white"
+                    : "bg-gray-100"
+                }`}
+              >
+                {i + 1}
+              </button>
             ))}
-            {achievements.length === 0 && (
-              <tr>
-                <td colSpan="3" className="text-center py-4 text-gray-500">
-                  Tidak ada prestasi untuk ditampilkan.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,51 +1,77 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../../config/db";
 import { ImagePlus, UploadCloud } from "lucide-react";
 
-const FormAddArticle = () => {
-  const [image, setImage] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+const FormEditArticle = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
 
-  const handleUpload = async (e) => {
+  useEffect(() => {
+    const fetchArticle = async () => {
+      const { data, error } = await supabase
+        .from("articles")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        alert("Gagal memuat artikel.");
+        console.error(error);
+        return;
+      }
+
+      setTitle(data.title);
+      setContent(data.content);
+      setImageUrl(data.thumbnail);
+    };
+
+    fetchArticle();
+  }, [id]);
+
+  const handleUpdate = async (e) => {
     e.preventDefault();
+    setUploading(true);
 
     try {
-      setUploading(true);
-      if (!image) throw new Error("Pilih gambar terlebih dahulu!");
+      let newImageUrl = imageUrl;
 
-      const fileExt = image.name.split(".").pop();
-      const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      if (image) {
+        const fileExt = image.name.split(".").pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
 
-      let { error: uploadError } = await supabase.storage
-        .from("thumbnail-article")
-        .upload(filePath, image);
+        const { error: uploadError } = await supabase.storage
+          .from("thumbnail-article")
+          .upload(filePath, image, { upsert: true });
 
-      if (uploadError) throw uploadError;
+        if (uploadError) throw uploadError;
 
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("thumbnail-article").getPublicUrl(filePath);
+        const { data } = supabase.storage
+          .from("thumbnail-article")
+          .getPublicUrl(filePath);
 
-      setImageUrl(publicUrl);
+        newImageUrl = data.publicUrl;
+      }
 
-      const { error } = await supabase.from("articles").insert([
-        {
+      const { error } = await supabase
+        .from("articles")
+        .update({
           title,
           content,
-          thumbnail: publicUrl,
-        },
-      ]);
+          thumbnail: newImageUrl,
+        })
+        .eq("id", id);
 
       if (error) throw error;
 
-      alert("Upload berhasil!");
-      setTitle("");
-      setContent("");
-      setImage(null);
+      alert("Artikel berhasil diperbarui!");
+      navigate("/admin/berita");
     } catch (error) {
       alert(error.message);
     } finally {
@@ -58,10 +84,10 @@ const FormAddArticle = () => {
       <div className="bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto space-y-6">
         <h2 className="text-2xl font-bold text-smporange flex items-center gap-2">
           <UploadCloud className="w-6 h-6" />
-          Tambah Artikel Baru
+          Edit Artikel
         </h2>
 
-        <form onSubmit={handleUpload} className="space-y-5">
+        <form onSubmit={handleUpdate} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Judul Artikel
@@ -70,7 +96,6 @@ const FormAddArticle = () => {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Masukkan judul artikel"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-smporange"
             />
           </div>
@@ -82,7 +107,6 @@ const FormAddArticle = () => {
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Tulis isi artikel di sini..."
               rows={6}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-smporange"
             />
@@ -95,19 +119,20 @@ const FormAddArticle = () => {
             <div className="flex items-center gap-4">
               <label className="cursor-pointer flex items-center gap-2 bg-smporange text-white px-4 py-2 rounded-md hover:bg-orange-600 transition">
                 <ImagePlus size={18} />
-                <span>{image ? image.name : "Pilih Gambar"}</span>
+                <span>{image ? image.name : "Ganti Gambar"}</span>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => setImage(e.target.files[0])}
                   className="hidden"
-                  disabled={uploading}
                 />
               </label>
-              {image && (
-                <span className="text-sm text-gray-600 italic">
-                  {image.name}
-                </span>
+              {imageUrl && (
+                <img
+                  src={imageUrl}
+                  alt="Current Thumbnail"
+                  className="w-20 h-20 object-cover rounded-md"
+                />
               )}
             </div>
           </div>
@@ -118,31 +143,12 @@ const FormAddArticle = () => {
             className="flex items-center gap-2 bg-smporange hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <UploadCloud size={18} />
-            {uploading ? "Mengupload..." : "Upload Artikel"}
+            {uploading ? "Menyimpan..." : "Simpan Perubahan"}
           </button>
         </form>
-
-        {imageUrl && (
-          <div className="mt-6 border-t pt-4">
-            <h3 className="font-semibold text-gray-700 mb-2">
-              Pratinjau Thumbnail:
-            </h3>
-            <img
-              src={imageUrl}
-              alt="Uploaded"
-              className="w-60 h-auto object-cover rounded-lg shadow"
-            />
-            <p className="mt-2 text-sm text-gray-500 break-all">
-              URL:{" "}
-              <a href={imageUrl} className="text-blue-600 underline">
-                {imageUrl}
-              </a>
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
-export default FormAddArticle;
+export default FormEditArticle;

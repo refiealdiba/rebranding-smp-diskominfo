@@ -29,6 +29,13 @@ import PhotoDetails from "../pages/Admin/PhotoDetails";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
 import GuruKaryawanAdmin from "../pages/Admin/GuruKaryawanAdmin";
 import FormAddArticle from "../components/Admin/FormAddArticle";
+import FormEditArticle from "../components/Admin/FormEditArticle";
+import FormAddKaryawan from "../components/Admin/FormAddKaryawan";
+import FormAddVideo from "../components/Admin/FormAddVideo";
+import FormEditVideo from "../components/Admin/FormEditVideo";
+import FormAddAchievement from "../components/Admin/FormAddAchievement";
+import FormEditAchievement from "../components/Admin/FormEditAchievement";
+import AdminPengaduan from "../pages/Admin/AdminPengaduan";
 
 const RouteList = createBrowserRouter([
   {
@@ -84,6 +91,10 @@ const RouteList = createBrowserRouter([
         element: <GaleriVideo />,
       },
       {
+        path: "galeriVideo/add",
+        element: <FormAddVideo />,
+      },
+      {
         path: "galeriPrestasi",
         element: <GaleriPrestasi />,
       },
@@ -123,27 +134,55 @@ const RouteList = createBrowserRouter([
       },
       {
         path: "guruKaryawan/add",
+        element: <FormAddKaryawan />,
+      },
+      {
+        path: "berita",
+        element: <Articles />,
+      },
+      {
+        path: "berita/add",
         element: <FormAddArticle />,
       },
       {
-        path: "articles",
-        element: <Articles />,
+        path: "berita/edit/:id",
+        element: <FormEditArticle />,
       },
       {
         path: "galeriFoto",
-        element: <Articles />,
+        element: <Photos />,
+      },
+      {
+        path: "galeriFoto/add",
+        element: <Photos />,
       },
       {
         path: "galeriVideo",
-        element: <Articles />,
+        element: <Videos />,
+      },
+      {
+        path: "galeriVideo/add",
+        element: <FormAddVideo />,
+      },
+      {
+        path: "galeriVideo/edit/:id",
+        element: <FormEditVideo />,
       },
       {
         path: "galeriPrestasi",
-        element: <Articles />,
+        element: <Achievements />,
+      },
+      {
+        path: "galeriPrestasi/add",
+        element: <FormAddAchievement />,
+      },
+      {
+        path: "galeriPrestasi/edit/:id",
+        element: <FormEditAchievement />,
       },
       {
         path: "pengaduan",
-        element: <Articles />,
+        element: <AdminPengaduan />,
       },
     ],
   },

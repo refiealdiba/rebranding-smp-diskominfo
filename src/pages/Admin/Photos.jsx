@@ -1,203 +1,151 @@
-import { useEffect, useState } from "react";
-import { PlusCircle, XCircle } from "lucide-react";
-import {
-  getPhotos,
-  createPhoto,
-  updatePhoto,
-  deletePhoto,
-} from "../../services/photos";
+import { Link } from "react-router-dom";
+import { Plus, Pencil, Trash } from "lucide-react";
+import { useState, useEffect } from "react";
+import { getPhotos, deletePhoto } from "../../services/photos";
 
-const Photos = () => {
+const ITEMS_PER_PAGE = 10;
+
+const PhotosAdmin = () => {
   const [photos, setPhotos] = useState([]);
-  const [editId, setEditId] = useState(null);
-  const [editData, setEditData] = useState({ title: "", url: "" });
-  const [newPhoto, setNewPhoto] = useState({ title: "", url: "" });
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedPhotos = photos.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(photos.length / ITEMS_PER_PAGE);
 
   useEffect(() => {
+    const fetchPhotos = async () => {
+      try {
+        const data = await getPhotos();
+        setPhotos(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchPhotos();
   }, []);
 
-  const fetchPhotos = async () => {
-    const data = await getPhotos();
-    setPhotos(data);
-  };
-
   const handleDelete = async (id) => {
-    if (window.confirm("Yakin ingin menghapus foto ini?")) {
+    const confirm = window.confirm("Yakin ingin menghapus album ini?");
+    if (confirm) {
       const deleted = await deletePhoto(id);
       if (deleted) {
-        setPhotos(photos.filter((p) => p.id !== id));
+        setPhotos(photos.filter((photo) => photo.id !== id));
       }
     }
   };
 
-  const handleEdit = (photo) => {
-    setEditId(photo.id);
-    setEditData({ title: photo.title, url: photo.url });
-  };
-
-  const handleSave = async () => {
-    const updated = await updatePhoto(editId, editData.title, editData.url);
-    if (updated) {
-      setPhotos(
-        photos.map((p) => (p.id === editId ? { ...p, ...editData } : p))
-      );
-      setEditId(null);
-    }
-  };
-
-  const handleAddPhoto = async () => {
-    if (!newPhoto.title || !newPhoto.url) {
-      alert("Judul dan URL tidak boleh kosong.");
-      return;
-    }
-
-    const added = await createPhoto(newPhoto.title, newPhoto.url);
-    if (added) {
-      fetchPhotos();
-      setNewPhoto({ title: "", url: "" });
-      setShowAddForm(false);
-    }
-  };
-
   return (
-    <div className="p-6 bg-white shadow rounded-lg min-h-screen">
-      <h2 className="text-2xl font-bold text-smporange mb-4">
-        Kelola Album Foto
-      </h2>
+    <div className="flex flex-col gap-12 px-4 py-10 font-inter">
+      <div className="font-bold self-start">
+        <h1 className="text-lg sm:text-xl md:text-2xl text-smporange">
+          Album Foto
+        </h1>
+      </div>
 
-      <button
-        onClick={() => setShowAddForm(!showAddForm)}
-        className={`mb-4 flex items-center gap-2 px-4 py-2 rounded font-medium text-white transition ${
-          showAddForm
-            ? "bg-red-500 hover:bg-red-600"
-            : "bg-smporange hover:bg-orange-600"
-        }`}
-      >
-        {showAddForm ? <XCircle size={20} /> : <PlusCircle size={20} />}
-        {showAddForm ? "Tutup Form" : "Tambah Album"}
-      </button>
+      <div className="flex flex-col gap-5">
+        <Link
+          to={"/admin/photos/add"}
+          className="flex w-max items-center gap-2 bg-smporange text-white px-3 py-2 rounded-md"
+        >
+          <Plus size={16} />
+          <p className="text-sm">Tambah Album</p>
+        </Link>
 
-      {showAddForm && (
-        <div className="mb-6 p-4 border rounded-lg bg-gray-50">
-          <div className="grid md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Judul Album"
-              value={newPhoto.title}
-              onChange={(e) =>
-                setNewPhoto({ ...newPhoto, title: e.target.value })
-              }
-              className="border px-3 py-2 rounded w-full"
-            />
-            <input
-              type="text"
-              placeholder="Thumbnail URL"
-              value={newPhoto.url}
-              onChange={(e) =>
-                setNewPhoto({ ...newPhoto, url: e.target.value })
-              }
-              className="border px-3 py-2 rounded w-full"
-            />
-          </div>
-          <button
-            onClick={handleAddPhoto}
-            className="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-          >
-            Simpan Album
-          </button>
-        </div>
-      )}
-
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-gray-100 shadow rounded-2xl overflow-hidden">
-          <thead className="bg-smporange text-white">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold">
-                Judul
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold">
-                Thumbnail
-              </th>
-              <th className="px-6 py-3 text-center text-sm font-semibold">
-                Aksi
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {photos.map((p) => (
-              <tr
-                key={p.id}
-                className="border-b hover:bg-yellow-50 transition-all duration-200"
-              >
-                <td className="px-6 py-4">
-                  {editId === p.id ? (
-                    <input
-                      value={editData.title}
-                      onChange={(e) =>
-                        setEditData({ ...editData, title: e.target.value })
-                      }
-                      className="border px-3 py-1 w-full rounded-md"
-                    />
-                  ) : (
-                    <span className="font-medium">{p.title}</span>
-                  )}
-                </td>
-                <td className="px-6 py-4">
-                  {editId === p.id ? (
-                    <input
-                      value={editData.url}
-                      onChange={(e) =>
-                        setEditData({ ...editData, url: e.target.value })
-                      }
-                      className="border px-3 py-1 w-full rounded-md"
-                    />
-                  ) : (
+        <div className="bg-white rounded-xl p-4 shadow-2xl overflow-x-auto">
+          <h2 className="font-semibold text-md mb-4">Tabel Album Foto</h2>
+          <table className="min-w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+            <thead>
+              <tr className="bg-gray-100 text-left text-sm font-semibold text-gray-700">
+                <th className="px-4 py-3 border">No.</th>
+                <th className="px-4 py-3 border">Thumbnail</th>
+                <th className="px-4 py-3 border">Judul</th>
+                <th className="px-4 py-3 border">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedPhotos.map((photo, index) => (
+                <tr key={photo.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 border text-center">
+                    {startIndex + index + 1}
+                  </td>
+                  <td className="px-4 py-2 border text-center">
                     <img
-                      src={p.url}
-                      alt="thumbnail"
-                      className="w-12 h-12 object-cover rounded shadow"
+                      src={photo.url}
+                      alt={photo.title}
+                      className="w-32 h-20 object-cover rounded-lg mx-auto"
                     />
-                  )}
-                </td>
-                <td className="px-6 py-4 text-center">
-                  {editId === p.id ? (
-                    <button
-                      onClick={handleSave}
-                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mr-2"
-                    >
-                      Simpan
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleEdit(p)}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded mr-2"
-                    >
-                      Edit
-                    </button>
-                  )}
-                  <button
-                    onClick={() => handleDelete(p.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                  >
-                    Hapus
-                  </button>
-                </td>
-              </tr>
+                  </td>
+                  <td className="px-4 py-2 border font-medium text-gray-800">
+                    {photo.title}
+                  </td>
+                  <td className="px-4 py-2 border">
+                    <div className="flex items-center gap-2">
+                      <Link
+                        to={`/admin/photos/edit/${photo.id}`}
+                        className="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded"
+                        title="Edit"
+                      >
+                        <Pencil size={16} />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(photo.id)}
+                        className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
+                        title="Hapus"
+                      >
+                        <Trash size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {paginatedPhotos.length === 0 && (
+                <tr>
+                  <td colSpan="4" className="text-center py-4 text-gray-500">
+                    Tidak ada album foto.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+
+          {/* Pagination */}
+          <div className="flex justify-end mt-4 gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+            >
+              Prev
+            </button>
+            {[...Array(totalPages)].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-3 py-1 rounded ${
+                  currentPage === i + 1
+                    ? "bg-smporange text-white"
+                    : "bg-gray-100"
+                }`}
+              >
+                {i + 1}
+              </button>
             ))}
-            {photos.length === 0 && (
-              <tr>
-                <td colSpan="3" className="text-center py-4 text-gray-500">
-                  Tidak ada album foto.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Photos;
+export default PhotosAdmin;
