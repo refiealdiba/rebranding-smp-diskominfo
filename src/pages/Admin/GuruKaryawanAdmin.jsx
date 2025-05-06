@@ -175,7 +175,7 @@ const GuruKaryawanAdmin = () => {
                 </div>
             </div>
             {showConfirmModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
                     <div className="bg-white p-6 rounded-lg shadow-xl w-80">
                         <h2 className="text-lg font-semibold mb-4">Konfirmasi Hapus</h2>
                         <p>Yakin ingin menghapus data ini?</p>

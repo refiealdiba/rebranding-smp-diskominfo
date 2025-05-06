@@ -54,14 +54,14 @@ const Sidebar = () => {
 
 const SidebarContent = ({ toggleSidebar, isActive, isGaleriOpen, toggleGaleri }) => (
     <>
-        <div className="flex flex-col items-center mb-8">
+        <Link to={"/"} className="flex flex-col items-center mb-8">
             <img src="/logo.png" alt="Logo" className="w-16 mb-2" />
             <h2 className="font-bold text-center text-sm leading-tight text-white">
                 SMPN 20
                 <br />
                 SEMARANG
             </h2>
-        </div>
+        </Link>
 
         <div className="flex flex-col gap-2 text-white">
             <Link
