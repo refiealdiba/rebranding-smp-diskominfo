@@ -37,6 +37,8 @@ import FormEditVideo from "../components/Admin/FormEditVideo";
 import FormAddAchievement from "../components/Admin/FormAddAchievement";
 import FormEditAchievement from "../components/Admin/FormEditAchievement";
 import AdminPengaduan from "../pages/Admin/AdminPengaduan";
+import Login from '../pages/Auth/Login';
+import Register from '../pages/Auth/Register';
 
 const RouteList = createBrowserRouter([
     {
@@ -46,6 +48,14 @@ const RouteList = createBrowserRouter([
             {
                 index: true,
                 element: <Home />,
+            },
+            {
+                path: "login",
+                element: <Login />,
+            },
+            {
+                path: "register",
+                element: <Register />,
             },
             {
                 path: "profilSekolah",
