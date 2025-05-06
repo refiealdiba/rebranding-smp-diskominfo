@@ -26,7 +26,7 @@ export const getPhotoLatest = async (limit) => {
 };
 
 export const getPhotoById = async (id) => {
-    const { data, error } = await supabase.from("photos").select("*").eq("id", id).single();
+    const { data, error } = await supabase.from("photos").select("*, photo_details(*)").eq("id", id).single();
     if (error) {
         console.error("Error fetching photo:", error);
         return null;
