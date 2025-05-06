@@ -42,6 +42,7 @@ import Register from "../pages/Auth/Register";
 import FormAddPhoto from "../components/Admin/FormAddPhoto";
 import FormEditPhoto from "../components/Admin/FormEditPhoto";
 import FormDetailPhoto from "../components/Admin/FormDetailPhoto";
+import AdminPengaduanDetail from "../pages/Admin/AdminPengaduanDetail";
 
 const RouteList = createBrowserRouter([
     {
@@ -201,6 +202,10 @@ const RouteList = createBrowserRouter([
             {
                 path: "pengaduan",
                 element: <AdminPengaduan />,
+            },
+            {
+                path: "pengaduan/:id",
+                element: <AdminPengaduanDetail />,
             },
         ],
     },

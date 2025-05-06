@@ -1,10 +1,23 @@
+import { useState, useEffect } from "react";
+import { createComplaint } from "../../services/complaints";
+
 const PengaduanForm = () => {
+    const handleSubmitComplaint = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData);
+        const { error } = await createComplaint(data.nama, data.email, data.pengaduan);
+        if (error) {
+            console.error("Error creating complaint:", error);
+        }
+    };
+
     return (
         <div className="font-inter max-w-xl mx-auto bg-white drop-shadow-2xl rounded-2xl p-6 space-y-10">
             <h2 className="font-semibold max-w-sm text-base text-center">
                 Silakan isi form di bawah ini untuk melakukan pengaduan
             </h2>
-            <form className="space-y-4 text-sm">
+            <form className="space-y-4 text-sm" onSubmit={handleSubmitComplaint}>
                 <div className="flex flex-col">
                     <label htmlFor="nama" className="mb-1 font-medium">
                         Nama
