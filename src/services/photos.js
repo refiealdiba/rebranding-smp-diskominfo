@@ -1,15 +1,15 @@
 import { supabase } from "../config/db";
 
 export const getPhotos = async () => {
-    const { data, error } = await supabase
-        .from("photos")
-        .select("*")
-        .order("created_at", { ascending: false });
-    if (error) {
-        console.error("Error fetching photos:", error);
-        return [];
-    }
-    return data;
+  const { data, error } = await supabase
+    .from("photos")
+    .select("*, photo_details(*)")
+    .order("created_at", { ascending: false });
+  if (error) {
+    console.error("Error fetching photos:", error);
+    return [];
+  }
+  return data;
 };
 
 export const getPhotoLatest = async (limit) => {
