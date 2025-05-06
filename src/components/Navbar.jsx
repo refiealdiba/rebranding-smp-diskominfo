@@ -90,11 +90,6 @@ const Navbar = () => {
                 <div className="hidden lg:flex items-center gap-4">
                     {user ? (
                         <div className="flex items-center gap-2">
-                            <img
-                                src={user.user_metadata.avatar_url}
-                                alt="User Avatar"
-                                className="w-8 h-8 rounded-full"
-                            />
                             {/* <span>{user.user_metadata.full_name}</span> */}
                             <button
                                 onClick={handleSignOut}

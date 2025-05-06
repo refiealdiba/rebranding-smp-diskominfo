@@ -53,14 +53,6 @@ const RouteList = createBrowserRouter([
                 element: <Home />,
             },
             {
-                path: "login",
-                element: <Login />,
-            },
-            {
-                path: "register",
-                element: <Register />,
-            },
-            {
                 path: "profilSekolah",
                 element: <ProfilSmp />,
             },
@@ -211,6 +203,14 @@ const RouteList = createBrowserRouter([
                 element: <AdminPengaduan />,
             },
         ],
+    },
+    {
+        path: "login",
+        element: <Login />,
+    },
+    {
+        path: "register",
+        element: <Register />,
     },
     {
         path: "*", // Fallback 404 global jika struktur rute diubah
