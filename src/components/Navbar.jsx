@@ -4,8 +4,10 @@ import { signInWithGoogle, signOut } from "../services/auth";
 import DropdownMenu from "./DropdownMenu";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+    const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
     const location = useLocation();
@@ -76,6 +78,11 @@ const Navbar = () => {
                         <Link to="/pengaduan" className={isActive("/pengaduan")}>
                             Pengaduan
                         </Link>
+                        {user && (
+                            <Link to="/admin" className={isActive("/admin")}>
+                                Admin
+                            </Link>
+                        )}
                     </div>
                 </div>
 
@@ -88,7 +95,7 @@ const Navbar = () => {
                                 alt="User Avatar"
                                 className="w-8 h-8 rounded-full"
                             />
-                            <span>{user.user_metadata.full_name}</span>
+                            {/* <span>{user.user_metadata.full_name}</span> */}
                             <button
                                 onClick={handleSignOut}
                                 className="bg-red-500 text-white px-4 py-1 rounded-full"
@@ -148,20 +155,25 @@ const Navbar = () => {
                     </Link>
 
                     {user ? (
-                        <div className="flex items-center gap-2 mt-3">
-                            <img
-                                src={user.user_metadata.avatar_url}
-                                alt="User Avatar"
-                                className="w-8 h-8 rounded-full"
-                            />
-                            <span>{user.user_metadata.full_name}</span>
-                            <button
-                                onClick={handleSignOut}
-                                className="bg-red-500 text-white px-4 py-1 rounded-full"
-                            >
-                                Sign Out
-                            </button>
-                        </div>
+                        <>
+                            <Link to="/admin" className={isActive("/pengaduan")}>
+                                Admin
+                            </Link>
+                            <div className="flex items-center gap-2 mt-3">
+                                <img
+                                    src={user.user_metadata.avatar_url}
+                                    alt="User Avatar"
+                                    className="w-8 h-8 rounded-full"
+                                />
+                                {/* <span>{user.user_metadata.full_name}</span> */}
+                                <button
+                                    onClick={handleSignOut}
+                                    className="bg-red-500 text-white px-4 py-1 rounded-full"
+                                >
+                                    Sign Out
+                                </button>
+                            </div>
+                        </>
                     ) : (
                         <button
                             onClick={signInWithGoogle}
