@@ -13,6 +13,7 @@ const FormAddEmployee = () => {
     const [imageUrl, setImageUrl] = useState("");
     const [name, setName] = useState("");
     const [position, setPosition] = useState("");
+    const [lastId, setLastId] = useState(0);
 
     useEffect(() => {
         if (image) {
@@ -21,15 +22,24 @@ const FormAddEmployee = () => {
 
             return () => URL.revokeObjectURL(localUrl); // Cleanup
         }
-
-        console.log(getLastIdEmployee());
     }, [image]);
+
+    useEffect(() => {
+        const fetchLastId = async () => {
+            const data = await getLastIdEmployee();
+            setLastId(data.id);
+            console.log(data);
+        };
+
+        fetchLastId();
+    }, []);
 
     const handleUpload = async (e) => {
         e.preventDefault();
 
         try {
             setUploading(true);
+
             if (!image) throw new Error("Pilih gambar terlebih dahulu!");
 
             const fileExt = image.name.split(".").pop();
@@ -46,11 +56,13 @@ const FormAddEmployee = () => {
                 data: { publicUrl },
             } = supabase.storage.from("employees").getPublicUrl(filePath);
 
-            setImageUrl(publicUrl);
+            // Ambil last ID di sini
+            const lastData = await getLastIdEmployee();
+            const nextId = lastData + 1;
 
             const { error } = await supabase.from("employees").insert([
                 {
-                    id: (await getLastIdEmployee()) + 1,
+                    id: nextId,
                     name,
                     position,
                     photo: publicUrl,
@@ -65,11 +77,11 @@ const FormAddEmployee = () => {
                 text: "Data karyawan berhasil diupload.",
             });
 
-            // Reset form
             setName("");
             setPosition("");
             setImage(null);
             setPreviewUrl(null);
+            navigate("/admin/guruKaryawan");
         } catch (error) {
             Swal.fire({
                 icon: "error",
@@ -78,7 +90,6 @@ const FormAddEmployee = () => {
             });
         } finally {
             setUploading(false);
-            // navigate("/admin/guruKaryawan");
         }
     };
 

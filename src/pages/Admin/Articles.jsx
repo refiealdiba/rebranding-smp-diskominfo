@@ -71,7 +71,7 @@ const Articles = () => {
 
     return (
         <div className="flex flex-col gap-10 px-4 py-10 font-inter">
-            <h1 className="text-xl font-bold text-smporange">Artikel</h1>
+            <h1 className="text-xl font-bold text-smporange">Berita</h1>
 
             <Link
                 to={"/admin/berita/add"}
@@ -82,6 +82,7 @@ const Articles = () => {
             </Link>
 
             <div className="bg-white rounded-xl p-4 shadow-2xl overflow-x-auto">
+                <h2 className="font-semibold text-md mb-4">Tabel Berita</h2>
                 <table className="min-w-full text-sm border border-gray-300">
                     <thead className="bg-gray-100">
                         <tr>
