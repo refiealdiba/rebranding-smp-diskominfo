@@ -46,7 +46,7 @@ export default function HomeAdmin() {
                     <p className="text-2xl font-bold text-blue-600">{totalEmployees}</p>
                 </div>
                 <div className="bg-white p-4 shadow rounded-2xl border-l-4 border-green-500">
-                    <h2 className="text-lg font-semibold mb-2">Total Artikel</h2>
+                    <h2 className="text-lg font-semibold mb-2">Total Berita</h2>
                     <p className="text-2xl font-bold text-green-600">{totalArticles}</p>
                 </div>
                 <div className="bg-white p-4 shadow rounded-2xl border-l-4 border-purple-500">

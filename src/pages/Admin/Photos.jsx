@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Plus, Pencil, Trash, NotebookText } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getPhotos, deletePhoto } from "../../services/photos";
+import Swal from "sweetalert2";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -13,28 +14,48 @@ const PhotosAdmin = () => {
     const paginatedPhotos = photos.slice(startIndex, startIndex + ITEMS_PER_PAGE);
     const totalPages = Math.ceil(photos.length / ITEMS_PER_PAGE);
 
-    useEffect(() => {
-        const fetchPhotos = async () => {
-            try {
-                const data = await getPhotos();
-                setPhotos(data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchPhotos();
-    }, []);
+    const fetchPhotos = async () => {
+        try {
+            const data = await getPhotos();
+            setPhotos(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleDelete = async (id) => {
-        const confirm = window.confirm("Yakin ingin menghapus album ini?");
-        if (confirm) {
-            const deleted = await deletePhoto(id);
-            if (deleted) {
-                setPhotos(photos.filter((photo) => photo.id !== id));
+        const result = await Swal.fire({
+            title: "Yakin ingin menghapus album ini?",
+            text: "Data yang dihapus tidak dapat dikembalikan.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#aaa",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal",
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await deletePhoto(id);
+                // setPhotos((prev) => prev.filter((photo) => photo.id !== id));
+                fetchPhotos();
+                await Swal.fire({
+                    icon: "success",
+                    title: "Terhapus!",
+                    text: "Album berhasil dihapus.",
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
+            } catch {
+                Swal.fire("Gagal", "Terjadi kesalahan saat menghapus data.", "error");
             }
         }
     };
+
+    useEffect(() => {
+        fetchPhotos();
+    }, []);
 
     return (
         <div className="flex flex-col gap-12 px-4 py-10 font-inter">

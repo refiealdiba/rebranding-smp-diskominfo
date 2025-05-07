@@ -3,6 +3,7 @@ import { Plus, Pencil, Trash } from "lucide-react";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { getAchivements, deleteAchivement } from "../../services/achievements";
+import cleanText from "../../middleware/cleanText";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -113,7 +114,7 @@ const Achievements = () => {
                                         />
                                     </td>
                                     <td className="px-4 py-2 border font-medium text-gray-800">
-                                        {item.title}
+                                        {cleanText(item.title)}
                                     </td>
                                     <td className="px-4 py-2 border text-center">
                                         <div className="flex justify-center items-center gap-2">

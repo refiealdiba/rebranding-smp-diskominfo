@@ -70,8 +70,10 @@ const Articles = () => {
     const totalPages = Math.ceil(articles.length / ITEMS_PER_PAGE);
 
     return (
-        <div className="flex flex-col gap-10 px-4 py-10 font-inter">
-            <h1 className="text-xl font-bold text-smporange">Berita</h1>
+        <div className="flex flex-col gap-12 px-4 py-10 font-inter">
+            <div className="font-bold self-start">
+                <h1 className="text-lg sm:text-xl md:text-2xl text-smporange">Berita</h1>
+            </div>
 
             <Link
                 to={"/admin/berita/add"}

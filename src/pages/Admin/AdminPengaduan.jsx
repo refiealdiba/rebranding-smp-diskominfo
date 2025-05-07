@@ -60,28 +60,30 @@ const AdminPengaduan = () => {
 
     return (
         <div className="px-4 py-10 font-inter bg-gray-50 min-h-screen">
-            <div className="max-w-4xl mx-auto space-y-10">
-                {/* Table */}
-                <div className="bg-white p-6 rounded-xl shadow-md overflow-x-auto">
-                    <h2 className="text-lg font-semibold mb-4">Daftar Pengaduan</h2>
-                    <table className="w-full text-sm border border-gray-200">
-                        <thead className="bg-gray-100">
-                            <tr>
-                                <th className="px-4 py-2 border">No.</th>
-                                <th className="px-4 py-2 border">Nama</th>
-                                <th className="px-4 py-2 border">Email</th>
-                                <th className="px-4 py-2 border">Pesan</th>
-                                {/* <th className="px-4 py-2 border text-center">Aksi</th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {pengaduan.map((item, index) => (
-                                <tr key={item.id} className="hover:bg-gray-50">
-                                    <td className="px-4 py-2 border text-center">{index + 1}</td>
-                                    <td className="px-4 py-2 border">{item.name}</td>
-                                    <td className="px-4 py-2 border">{item.email}</td>
-                                    <td className="px-4 py-2 border">{item.complaint}</td>
-                                    {/* <td className="px-4 py-2 border text-center">
+            <div className="font-bold self-start mb-10">
+                <h1 className="text-lg sm:text-xl md:text-2xl text-smporange">Pengaduan</h1>
+            </div>
+            {/* Table */}
+            <div className="bg-white p-6 rounded-xl shadow-md overflow-x-auto">
+                <h2 className="text-lg font-semibold mb-4">Daftar Pengaduan</h2>
+                <table className="w-full text-sm border border-gray-200">
+                    <thead className="bg-gray-100">
+                        <tr>
+                            <th className="px-4 py-2 border">No.</th>
+                            <th className="px-4 py-2 border">Nama</th>
+                            <th className="px-4 py-2 border">Email</th>
+                            <th className="px-4 py-2 border">Pesan</th>
+                            {/* <th className="px-4 py-2 border text-center">Aksi</th> */}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {pengaduan.map((item, index) => (
+                            <tr key={item.id} className="hover:bg-gray-50">
+                                <td className="px-4 py-2 border text-center">{index + 1}</td>
+                                <td className="px-4 py-2 border">{item.name}</td>
+                                <td className="px-4 py-2 border">{item.email}</td>
+                                <td className="px-4 py-2 border">{item.complaint}</td>
+                                {/* <td className="px-4 py-2 border text-center">
                                         <div className="flex justify-center gap-2">
                                             <button
                                                 onClick={() => handleEdit(item)}
@@ -103,18 +105,17 @@ const AdminPengaduan = () => {
                                             </Link>
                                         </div>
                                     </td> */}
-                                </tr>
-                            ))}
-                            {pengaduan.length === 0 && (
-                                <tr>
-                                    <td colSpan="5" className="text-center py-4 text-gray-500">
-                                        Tidak ada pengaduan.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                            </tr>
+                        ))}
+                        {pengaduan.length === 0 && (
+                            <tr>
+                                <td colSpan="5" className="text-center py-4 text-gray-500">
+                                    Tidak ada pengaduan.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

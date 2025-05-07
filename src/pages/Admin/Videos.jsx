@@ -61,8 +61,10 @@ const Videos = () => {
     const totalPages = Math.ceil((videos?.length || 0) / ITEMS_PER_PAGE);
 
     return (
-        <div className="flex flex-col gap-10 px-4 py-10 font-inter">
-            <h1 className="text-xl font-bold text-smporange">Video</h1>
+        <div className="flex flex-col gap-12 px-4 py-10 font-inter">
+            <div className="font-bold self-start">
+                <h1 className="text-lg sm:text-xl md:text-2xl text-smporange">Video</h1>
+            </div>
 
             <Link
                 to={"/admin/galeriVideo/add"}
@@ -73,6 +75,7 @@ const Videos = () => {
             </Link>
 
             <div className="bg-white rounded-xl p-4 shadow-2xl overflow-x-auto">
+                <h2 className="font-semibold text-md mb-4">Tabel Video</h2>
                 <table className="min-w-full text-sm border border-gray-300">
                     <thead className="bg-gray-100">
                         <tr>

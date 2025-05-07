@@ -155,11 +155,6 @@ const Navbar = () => {
                                 Admin
                             </Link>
                             <div className="flex items-center gap-2 mt-3">
-                                <img
-                                    src={user.user_metadata.avatar_url}
-                                    alt="User Avatar"
-                                    className="w-8 h-8 rounded-full"
-                                />
                                 {/* <span>{user.user_metadata.full_name}</span> */}
                                 <button
                                     onClick={handleSignOut}

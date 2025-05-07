@@ -110,7 +110,7 @@ const FormEditArticle = () => {
             <div className="bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto space-y-6">
                 <h2 className="text-2xl font-bold text-smporange flex items-center gap-2">
                     <UploadCloud className="w-6 h-6" />
-                    Edit Artikel
+                    Edit Berita
                 </h2>
 
                 <form onSubmit={handleUpdate} className="space-y-5">

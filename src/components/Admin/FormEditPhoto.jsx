@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../config/db";
 import { ImagePlus, UploadCloud } from "lucide-react";
+import Swal from "sweetalert2";
 
 const FormEditPhoto = () => {
     const { id } = useParams();
@@ -14,16 +15,20 @@ const FormEditPhoto = () => {
 
     useEffect(() => {
         const fetchAlbum = async () => {
-            const { data, error } = await supabase.from("photos").select("*").eq("id", id).single();
+            try {
+                const { data, error } = await supabase
+                    .from("photos")
+                    .select("*")
+                    .eq("id", id)
+                    .single();
+                if (error) throw error;
 
-            if (error) {
+                setTitle(data.title);
+                setImageUrl(data.thumbnail);
+            } catch (error) {
                 console.error("Gagal mengambil data album:", error);
-                alert("Gagal memuat data album.");
-                return;
+                Swal.fire("Gagal", "Tidak dapat memuat data album.", "error");
             }
-
-            setTitle(data.title);
-            setImageUrl(data.thumbnail);
         };
 
         fetchAlbum();
@@ -31,6 +36,17 @@ const FormEditPhoto = () => {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+
+        const result = await Swal.fire({
+            title: "Simpan perubahan?",
+            text: "Perubahan akan langsung diterapkan ke album.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Ya, simpan",
+            cancelButtonText: "Batal",
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             setUploading(true);
@@ -67,10 +83,17 @@ const FormEditPhoto = () => {
 
             if (error) throw error;
 
-            alert("Perubahan berhasil disimpan!");
+            await Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Album berhasil diperbarui.",
+                timer: 1500,
+                showConfirmButton: false,
+            });
+
             navigate("/admin/galeriFoto");
         } catch (error) {
-            alert(error.message);
+            Swal.fire("Gagal", error.message, "error");
         } finally {
             setUploading(false);
         }
@@ -118,15 +141,33 @@ const FormEditPhoto = () => {
                                     disabled={uploading}
                                 />
                             </label>
-                            {imageUrl && (
-                                <img
-                                    src={imageUrl}
-                                    alt="Thumbnail Preview"
-                                    className="w-24 h-24 object-cover rounded-lg shadow"
-                                />
+                            {image && (
+                                <span className="text-sm text-gray-600 italic">{image.name}</span>
                             )}
                         </div>
                     </div>
+
+                    {imageUrl && (
+                        <div className="mt-6 border-t pt-4">
+                            <h3 className="font-semibold text-gray-700 mb-2">Pratinjau Foto:</h3>
+                            <img
+                                src={imageUrl}
+                                alt="Thumbnail"
+                                className="w-60 h-auto object-cover rounded-lg shadow"
+                            />
+                            <p className="mt-2 text-sm text-gray-500 break-all">
+                                URL:{" "}
+                                <a
+                                    href={imageUrl}
+                                    className="text-blue-600 underline"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    {imageUrl}
+                                </a>
+                            </p>
+                        </div>
+                    )}
 
                     <button
                         type="submit"
@@ -137,28 +178,6 @@ const FormEditPhoto = () => {
                         {uploading ? "Menyimpan..." : "Simpan Perubahan"}
                     </button>
                 </form>
-
-                {imageUrl && (
-                    <div className="mt-6 border-t pt-4">
-                        <h3 className="font-semibold text-gray-700 mb-2">Pratinjau Foto:</h3>
-                        <img
-                            src={imageUrl}
-                            alt="Thumbnail"
-                            className="w-60 h-auto object-cover rounded-lg shadow"
-                        />
-                        <p className="mt-2 text-sm text-gray-500 break-all">
-                            URL:{" "}
-                            <a
-                                href={imageUrl}
-                                className="text-blue-600 underline"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                {imageUrl}
-                            </a>
-                        </p>
-                    </div>
-                )}
             </div>
         </div>
     );

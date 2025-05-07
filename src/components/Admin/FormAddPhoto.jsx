@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../config/db";
 import { ImagePlus, UploadCloud } from "lucide-react";
 import { getPhotoLatest } from "../../services/photos";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const FormAddPhoto = () => {
+    const navigate = useNavigate();
     const [latestId, setLatestId] = useState();
     const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false);
@@ -44,11 +47,17 @@ const FormAddPhoto = () => {
 
             if (error) throw error;
 
-            alert("Upload berhasil!");
+            await Swal.fire({
+                icon: "success",
+                title: "Berhasil",
+                text: "Album berhasil ditambahkan!",
+            });
+
             setTitle("");
             setImage(null);
+            navigate("/admin/galeriFoto");
         } catch (error) {
-            alert(error.message);
+            Swal.fire("Gagal", error.message, "error");
         } finally {
             setUploading(false);
         }
@@ -100,7 +109,13 @@ const FormAddPhoto = () => {
                                 <input
                                     type="file"
                                     accept="image/*"
-                                    onChange={(e) => setImage(e.target.files[0])}
+                                    onChange={(e) => {
+                                        const file = e.target.files[0];
+                                        if (file) {
+                                            setImage(file);
+                                            setImageUrl(URL.createObjectURL(file)); // ✅ Tambahkan ini untuk preview
+                                        }
+                                    }}
                                     className="hidden"
                                     disabled={uploading}
                                 />
@@ -111,6 +126,27 @@ const FormAddPhoto = () => {
                         </div>
                     </div>
 
+                    {imageUrl && (
+                        <div className="mt-6 border-t pt-4">
+                            <h3 className="font-semibold text-gray-700 mb-2">Pratinjau Foto:</h3>
+                            <img
+                                src={imageUrl}
+                                alt="Uploaded"
+                                className="w-60 h-auto object-cover rounded-lg shadow"
+                            />
+                            <p className="mt-2 text-sm text-gray-500 break-all">
+                                URL:{" "}
+                                <a
+                                    href={imageUrl}
+                                    className="text-blue-600 underline"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    {imageUrl}
+                                </a>
+                            </p>
+                        </div>
+                    )}
                     <button
                         type="submit"
                         disabled={uploading}
@@ -120,28 +156,6 @@ const FormAddPhoto = () => {
                         {uploading ? "Mengupload..." : "Upload Data"}
                     </button>
                 </form>
-
-                {imageUrl && (
-                    <div className="mt-6 border-t pt-4">
-                        <h3 className="font-semibold text-gray-700 mb-2">Pratinjau Foto:</h3>
-                        <img
-                            src={imageUrl}
-                            alt="Uploaded"
-                            className="w-60 h-auto object-cover rounded-lg shadow"
-                        />
-                        <p className="mt-2 text-sm text-gray-500 break-all">
-                            URL:{" "}
-                            <a
-                                href={imageUrl}
-                                className="text-blue-600 underline"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                {imageUrl}
-                            </a>
-                        </p>
-                    </div>
-                )}
             </div>
         </div>
     );
