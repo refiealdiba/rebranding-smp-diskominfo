@@ -70,12 +70,12 @@ const FormEditArticle = () => {
                 const filePath = `${fileName}`;
 
                 const { error: uploadError } = await supabase.storage
-                    .from("thumbnail-article")
-                    .upload(filePath, image, { upsert: true });
+                    .from("photo-gallery")
+                    .upload(filePath, image);
 
                 if (uploadError) throw uploadError;
 
-                const { data } = supabase.storage.from("thumbnail-article").getPublicUrl(filePath);
+                const { data } = supabase.storage.from("photo-gallery").getPublicUrl(filePath);
 
                 newImageUrl = data.publicUrl;
             }
