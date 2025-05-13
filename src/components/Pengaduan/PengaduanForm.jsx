@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { createComplaint } from "../../services/complaints";
+import { sanitizeText } from "../../middleware/sanitizeText";
+import sanitizeHtml from "sanitize-html-react";
 
 const PengaduanForm = () => {
     const [form, setForm] = useState({
@@ -14,7 +16,9 @@ const PengaduanForm = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        // const sanitizedValue = sanitizeText(value); // 🔐 Sanitize input here
+        const sanitizedValue = sanitizeHtml(value);
+        setForm((prev) => ({ ...prev, [name]: sanitizedValue }));
     };
 
     const handleSubmitComplaint = async (e) => {
@@ -31,10 +35,15 @@ const PengaduanForm = () => {
             return;
         }
 
-        await createComplaint(nama, email, pesan);
-        setSuccess("Pengaduan berhasil dikirim.");
-        setForm({ nama: "", email: "", pesan: "" });
-        setLoading(false);
+        try {
+            await createComplaint(nama, email, pesan);
+            setSuccess("Pengaduan berhasil dikirim.");
+            setForm({ nama: "", email: "", pesan: "" });
+        } catch (err) {
+            setError("Gagal mengirim pengaduan.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
