@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home";
-import Test from "../pages/test";
 import MainLayout from "../components/layouts/MainLayout";
 import ProfilSmp from "../pages/ProfilSmp";
 import VisiMisi from "../pages/VisiMisi";
@@ -18,14 +17,11 @@ import Pengaduan from "../pages/Pengaduan";
 import Prestasi from "../pages/Prestasi";
 import ProfilGuru from "../pages/ProfilGuru";
 import GaleriFotoDetail from "../pages/GaleriFotoDetail";
-
 import HomeAdmin from "../pages/Admin/HomeAdmin";
-import Users from "../pages/Admin/Users";
 import Articles from "../pages/Admin/Articles";
 import Videos from "../pages/Admin/Videos";
 import Achievements from "../pages/Admin/Achievements";
 import Photos from "../pages/Admin/Photos";
-import PhotoDetails from "../pages/Admin/PhotoDetails";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
 import GuruKaryawanAdmin from "../pages/Admin/GuruKaryawanAdmin";
 import FormAddArticle from "../components/Admin/FormAddArticle";
@@ -117,10 +113,6 @@ const RouteList = createBrowserRouter([
             {
                 path: "pengaduan",
                 element: <Pengaduan />,
-            },
-            {
-                path: "test",
-                element: <Test />,
             },
             {
                 path: "*", // 404 fallback untuk route dalam MainLayout
